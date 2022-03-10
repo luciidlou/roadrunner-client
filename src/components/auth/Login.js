@@ -7,7 +7,7 @@ import { useRef, useState } from "react"
 import { useHistory } from "react-router-dom"
 
 
-export const Login = ({ setToken }) => {
+export const Login = ({ setToken, setUserType }) => {
     const username = useRef()
     const password = useRef()
     const [isUnsuccessful, setisUnsuccessful] = useState(false)
@@ -24,7 +24,8 @@ export const Login = ({ setToken }) => {
         loginUser(user).then(res => {
             if ("valid" in res && res.valid) {
                 setToken(res.token)
-                history.push("/")
+                setUserType(res.user_type)
+                history.push("/dashboard")
             }
             else {
                 setisUnsuccessful(true)
@@ -59,7 +60,7 @@ export const Login = ({ setToken }) => {
                         <input
                             className="input password m-auto"
                             ref={password}
-                            type="text"
+                            type="password"
                             name="password"
                             placeholder="Enter password..."
                         />

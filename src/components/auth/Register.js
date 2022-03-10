@@ -4,8 +4,10 @@ import { registerUser } from "./AuthManager"
 import "./Register.css"
 import logo1 from "../../images/roadrunner-logo1.png"
 import logo2 from "../../images/roadrunner-logo2.png"
+import { useHistory } from "react-router-dom"
 
-export const Register = ({ token, setToken }) => {
+export const Register = ({ setToken }) => {
+    const history = useHistory()
     const firstName = useRef()
     const lastName = useRef()
     const email = useRef()
@@ -14,7 +16,7 @@ export const Register = ({ token, setToken }) => {
     const verifyPassword = useRef()
     const passwordDialog = useRef()
     const company = useRef()
-    const userType = useRef()
+    const [userType, setUserType] = useState("")
 
     const handleRegister = (e) => {
         e.preventDefault()
@@ -27,18 +29,29 @@ export const Register = ({ token, setToken }) => {
                 "password": password.current.value,
                 "email": email.current.value,
                 "company": company.current.value,
-                "user_type": userType.current.value
+                "user_type": userType
             }
 
             registerUser(newUser)
                 .then(res => {
                     if ("token" in res) {
                         setToken(res.token)
+                        setUserType(res.user_type)
+                        history.push('/dashboard')
                     }
                 })
         }
         else {
             passwordDialog.current.showModal()
+        }
+    }
+
+    const handleUserType = (event) => {
+        const checkboxes = document.querySelectorAll('.user-type')
+        for (const box of checkboxes) {
+            if (box.checked) {
+                setUserType(event.target.value)
+            }
         }
     }
 
@@ -148,11 +161,11 @@ export const Register = ({ token, setToken }) => {
                             <label htmlFor="company">What is your purpose?</label>
                             <div className="control mt-3">
                                 <label className="radio">
-                                    <input className="mx-2" type="radio" name="userType" value="distributor" ref={userType} />
+                                    <input className="user-type mx-2" type="radio" name="userType" value="distributor" onClick={handleUserType} />
                                     Distribution
                                 </label>
                                 <label className="radio">
-                                    <input className="mx-2" type="radio" name="userType" value="dispatcher" ref={userType} />
+                                    <input className="user-type mx-2" type="radio" name="userType" value="dispatcher" onClick={handleUserType} />
                                     Dispatching
                                 </label>
                             </div>

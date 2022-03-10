@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { Route, Redirect } from "react-router-dom"
 import { ApplicationViews } from "./ApplicationViews"
 import { Login } from "./auth/Login"
@@ -8,10 +8,16 @@ import "./Roadrunner.css"
 
 export const Roadrunner = () => {
     const [token, setTokenState] = useState(localStorage.getItem('token'))
+    const [userType, setUserTypeState] = useState(localStorage.getItem('userType'))
 
     const setToken = (newToken) => {
         localStorage.setItem('token', newToken)
         setTokenState(newToken)
+    }
+
+    const setUserType = (newUserType) => {
+        localStorage.setItem('userType', newUserType)
+        setUserTypeState(newUserType)
     }
 
     return <>
@@ -19,7 +25,7 @@ export const Roadrunner = () => {
             token
                 ?
                 <Route>
-                    <NavBar token={token} setToken={setToken} />
+                    <NavBar token={token} setToken={setToken} userType={userType} setUserType={setUserType} />
                     <ApplicationViews />
                 </Route>
                 :
@@ -27,13 +33,11 @@ export const Roadrunner = () => {
         }
 
         <Route exact path="/login" >
-            {/* <NavBar token={token} setToken={setToken} /> */}
-            <Login token={token} setToken={setToken} />
+            <Login setToken={setToken} setUserType={setUserType} />
         </Route>
 
         <Route exact path="/register" >
-            {/* <NavBar token={token} setToken={setToken} /> */}
-            <Register token={token} setToken={setToken} />
+            <Register setToken={setToken} setUserType={setUserType} />
         </Route>
     </>
 }
