@@ -5,5 +5,9 @@ export const LoadRepository = {
     async booked() {
         const res = await fetch(`${Settings.remoteUrl}/loads/booked`, FetchOptions())
         return await res.json()
+    },
+    async unbooked() {
+        const res = await fetch(`${Settings.remoteUrl}/loads`, FetchOptions())
+        return await res.json()
     }
 }
