@@ -11,12 +11,12 @@ export const Home = () => {
     }, [])
 
     return (
-        <div className="container">
+        <div className="box mx-auto" style={{ width: "70%" }}>
             {
                 bookedLoads.map(load => {
                     const truckLocation = `${load.assigned_truck?.current_city}, ${load.assigned_truck?.current_state}`
                     return (
-                        <div key={load.id}>{load.assigned_truck?.alias} is assigned to load #{load.id} and is currently in {truckLocation}</div> 
+                        <div key={load.id}>{load.assigned_truck?.alias} is assigned to load #{load.id} and is currently in {truckLocation}</div>
                     )
                 })
             }
