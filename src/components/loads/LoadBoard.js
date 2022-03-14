@@ -3,8 +3,10 @@ import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
 import { useHistory } from "react-router-dom"
 import { LoadRepository } from "../../repositories/LoadRepository"
+import "./LoadBoard.css"
 
 export const LoadBoard = () => {
+    const history = useHistory()
     const [unBookedLoads, setUnBookedLoads] = useState([])
 
     useEffect(() => {
@@ -52,7 +54,7 @@ export const LoadBoard = () => {
                             return (
                                 !load.is_booked
                                     ?
-                                    <tr key={load.id}>
+                                    <tr className="load-row" onClick={() => history.push(`/loads/${load.id}`)} key={load.id}>
                                         <td>{load.id}</td>
                                         <td>{load.distributor?.company}</td>
                                         <td>{displayFreightTypeList}</td>
@@ -65,7 +67,7 @@ export const LoadBoard = () => {
                                         <td>{load.dropoff_state}</td>
                                         <td>{dropoffDateTime}</td>
                                         <td>{load.distance}</td>
-                                        <td>{load.is_hazardous ? "yes" : "no"}</td>
+                                        <td>{load.is_hazardous ? "Yes" : "No"}</td>
                                     </tr>
                                     : null
                             )

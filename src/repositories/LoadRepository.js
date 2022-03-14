@@ -6,6 +6,10 @@ export const LoadRepository = {
         const res = await fetch(`${Settings.remoteUrl}/loads`, FetchOptions())
         return await res.json()
     },
+    async retrieve(id) {
+        const res = await fetch(`${Settings.remoteUrl}/loads/${id}`, FetchOptions())
+        return await res.json()
+    },
     async booked() {
         const res = await fetch(`${Settings.remoteUrl}/loads/booked`, FetchOptions())
         return await res.json()
@@ -13,5 +17,9 @@ export const LoadRepository = {
     async create(obj) {
         const res = await fetch(`${Settings.remoteUrl}/loads`, FetchOptions("POST", obj))
         return await res.json()
-    }
+    },
+    async update(id, obj) {
+        const res = await fetch(`${Settings.remoteUrl}/loads/${id}`, FetchOptions("PUT", obj))
+        return res
+    },
 }
