@@ -1,14 +1,15 @@
+import moment from "moment"
 import { useEffect, useState } from "react"
 import { useHistory } from "react-router-dom"
 import { Link } from "react-router-dom"
-import { FreightTypeRepository } from "../../repositories/FreightTypeRepository"
+import { useParams } from "react-router-dom"
 import { LoadRepository } from "../../repositories/LoadRepository"
 import { QueryMaps } from "../../utilities/QueryMaps"
 import { StatesArray } from "../../utilities/StatesArray"
 
-export const NewLoadForm = ({ freightTypes, syncFreightTypes }) => {
+export const EditLoadForm = ({ freightTypes, syncFreightTypes }) => {
+    const { loadId } = useParams()
     const history = useHistory()
-
     const [loadBuilder, setLoadBuilder] = useState({
         pickup_address: "",
         pickup_city: "",
@@ -24,7 +25,28 @@ export const NewLoadForm = ({ freightTypes, syncFreightTypes }) => {
     })
 
     useEffect(() => {
-        syncFreightTypes()
+        LoadRepository.retrieve(loadId)
+            .then(load => {
+                const freightTypeIdArr = []
+
+                if (load.freight_types?.length > 0) {
+                    load.freight_types.forEach(type => freightTypeIdArr.push(type.id))
+                }
+
+                setLoadBuilder({
+                    pickup_address: load.pickup_address,
+                    pickup_city: load.pickup_city,
+                    pickup_state: load.pickup_state,
+                    pickup_datetime: load.pickup_datetime,
+                    dropoff_address: load.dropoff_address,
+                    dropoff_city: load.dropoff_city,
+                    dropoff_state: load.dropoff_state,
+                    dropoff_datetime: load.dropoff_datetime,
+                    distance: load.distance,
+                    is_hazardous: load.is_hazardous,
+                    freight_types: freightTypeIdArr
+                })
+            })
     }, [])
 
     const handleOnChange = (event) => {
@@ -51,7 +73,7 @@ export const NewLoadForm = ({ freightTypes, syncFreightTypes }) => {
         for (const type of freightTypes) {
             for (const loadFreightId of loadBuilder.freight_types) {
                 if (type.id === loadFreightId) {
-                    if (type.endorsement?.id === 3) {
+                    if (type.endorsement?.letter === "H") {
                         return <div className="has-text-danger my-4">This load is hazardous!</div>
                     }
                 }
@@ -79,31 +101,28 @@ export const NewLoadForm = ({ freightTypes, syncFreightTypes }) => {
         window.open(url)
     }
 
-    const handleSubmitNew = (event) => {
+    const handleSubmitEdit = (event) => {
         event.preventDefault()
-        if (displayHazardMessage !== "") {
+        if (displayHazardMessage !== undefined) {
             loadBuilder.is_hazardous = true
         }
         else {
             loadBuilder.is_hazardous = false
         }
-        LoadRepository.create(loadBuilder)
+        LoadRepository.update(loadId, loadBuilder)
             .then(() => history.push("/loadboard"))
     }
 
-
-
-
-
     return (
         <div className="box mx-auto" style={{ width: "50%" }}>
-            <form onSubmit={handleSubmitNew} className="form">
-                <div className="title">New load form</div>
+            <form onSubmit={handleSubmitEdit} className="form">
+                <div className="title">Edit load #{loadId}</div>
                 <div className="has-text-grey is-size-4">Pickup Info:</div>
                 {/* pickup_address */}
                 <fieldset className="my-5 is-size-5">
                     <label htmlFor="pickup_address">Pickup address</label>
                     <input
+                        value={loadBuilder.pickup_address}
                         onChange={handleOnChange}
                         className="input name m-auto"
                         type="text"
@@ -115,6 +134,7 @@ export const NewLoadForm = ({ freightTypes, syncFreightTypes }) => {
                 <fieldset className="my-5 is-size-5">
                     <label htmlFor="pickup_city">Pickup city</label>
                     <input
+                        value={loadBuilder.pickup_city}
                         onChange={handleOnChange}
                         className="input name m-auto"
                         type="text"
@@ -126,6 +146,7 @@ export const NewLoadForm = ({ freightTypes, syncFreightTypes }) => {
                 <fieldset className="my-5 is-size-5">
                     <label htmlFor="pickup_state">Pickup state</label>
                     <select
+                        value={loadBuilder.pickup_state}
                         onChange={handleOnChange}
                         className="input name m-auto"
                         name="pickup_state"
@@ -142,6 +163,7 @@ export const NewLoadForm = ({ freightTypes, syncFreightTypes }) => {
                 <fieldset style={{ borderBottom: "1px solid grey" }} className="my-5 pb-6 is-size-5">
                     <label htmlFor="pickup_datetime">Pickup date/time</label>
                     <input
+                        value={moment(loadBuilder.pickup_datetime).format('YYYY-MM-DDTHH:mm')}
                         onChange={handleOnChange}
                         className="input name m-auto"
                         type="datetime-local"
@@ -154,6 +176,7 @@ export const NewLoadForm = ({ freightTypes, syncFreightTypes }) => {
                 <fieldset className="my-5 is-size-5">
                     <label htmlFor="dropoff_address">Dropoff address</label>
                     <input
+                        value={loadBuilder.dropoff_address}
                         onChange={handleOnChange}
                         className="input name m-auto"
                         type="text"
@@ -165,6 +188,7 @@ export const NewLoadForm = ({ freightTypes, syncFreightTypes }) => {
                 <fieldset className="my-5 is-size-5">
                     <label htmlFor="dropoff_city">Dropoff city</label>
                     <input
+                        value={loadBuilder.dropoff_city}
                         onChange={handleOnChange}
                         className="input name m-auto"
                         type="text"
@@ -176,6 +200,7 @@ export const NewLoadForm = ({ freightTypes, syncFreightTypes }) => {
                 <fieldset className="my-5 is-size-5">
                     <label htmlFor="dropoff_state">Dropoff state</label>
                     <select
+                        value={loadBuilder.dropoff_state}
                         onChange={handleOnChange}
                         className="input name m-auto"
                         name="dropoff_state"
@@ -192,6 +217,7 @@ export const NewLoadForm = ({ freightTypes, syncFreightTypes }) => {
                 <fieldset style={{ borderBottom: "1px solid grey" }} className="my-5 pb-6 is-size-5">
                     <label htmlFor="dropoff_datetime">Dropoff date/time</label>
                     <input
+                        value={moment(loadBuilder.dropoff_datetime).format('YYYY-MM-DDTHH:mm')}
                         onChange={handleOnChange}
                         className="input name m-auto"
                         type="datetime-local"
@@ -211,6 +237,7 @@ export const NewLoadForm = ({ freightTypes, syncFreightTypes }) => {
                 <fieldset className="my-5 is-size-5">
                     <label htmlFor="distance">Distance (miles)</label>
                     <input
+                        value={loadBuilder.distance}
                         onChange={handleOnChange}
                         className="input name m-auto"
                         type="number"
@@ -239,8 +266,8 @@ export const NewLoadForm = ({ freightTypes, syncFreightTypes }) => {
                 </fieldset>
                 {displayHazardMessage}
                 <div className="container">
-                    <button type="submit" className="button is-success">Confirm load</button>
-                    <button type="reset" className="button ml-4" onClick={() => history.push('/loadboard')}><Link to="/loadboard">Cancel Load</Link></button>
+                    <button type="submit" className="button is-success">Confirm edit</button>
+                    <button type="reset" className="button ml-4" onClick={() => history.push('/loadboard')}><Link to="/loadboard">Cancel edit</Link></button>
                 </div>
             </form>
         </div>

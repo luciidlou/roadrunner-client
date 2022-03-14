@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from "react"
 import { Route } from "react-router-dom"
 import { Home } from "./home/Home"
-import { LoadBoard } from "./loads/LoadBoard"
-import { NewLoadForm } from "./loads/NewLoadForm"
-import { NavBar } from "./nav/NavBar"
+import { LoadRoutes } from "./routes/LoadRoutes"
 
 
 export const ApplicationViews = () => {
@@ -13,12 +11,8 @@ export const ApplicationViews = () => {
       <Route exact path={["/", "/dashboard"]}>
         <Home />
       </Route>
-      <Route exact path="/loadboard">
-        <LoadBoard />
-      </Route>
-      <Route exact path="/newload">
-        <NewLoadForm />
-      </Route>
+
+      <LoadRoutes />
     </main>
   )
 }
