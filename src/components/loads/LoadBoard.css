@@ -5,3 +5,6 @@ tbody tr:nth-child(odd) {
     cursor: pointer;
     background-color: rgb(167, 210, 240);
 }
+.load-row {
+    height: 80px;
+}

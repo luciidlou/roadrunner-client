@@ -6,7 +6,7 @@ import { LoadRepository } from "../../repositories/LoadRepository"
 import { QueryMaps } from "../../utilities/QueryMaps"
 import { StatesArray } from "../../utilities/StatesArray"
 
-export const NewLoadForm = ({ freightTypes, syncFreightTypes }) => {
+export const NewLoadForm = ({ freightTypes, syncFreightTypes, syncLoads }) => {
     const history = useHistory()
 
     const [loadBuilder, setLoadBuilder] = useState({
@@ -65,11 +65,9 @@ export const NewLoadForm = ({ freightTypes, syncFreightTypes }) => {
             loadBuilder.pickup_address !== ""
             && loadBuilder.pickup_city !== ""
             && loadBuilder.pickup_state !== ""
-            && loadBuilder.pickup_datetime !== ""
             && loadBuilder.dropoff_address !== ""
             && loadBuilder.dropoff_city !== ""
             && loadBuilder.dropoff_state !== ""
-            && loadBuilder.dropoff_datetime !== ""
         )
             return true
     }
@@ -88,6 +86,7 @@ export const NewLoadForm = ({ freightTypes, syncFreightTypes }) => {
             loadBuilder.is_hazardous = false
         }
         LoadRepository.create(loadBuilder)
+            .then(syncLoads)
             .then(() => history.push("/loadboard"))
     }
 
@@ -96,9 +95,9 @@ export const NewLoadForm = ({ freightTypes, syncFreightTypes }) => {
 
 
     return (
-        <div className="box mx-auto" style={{ width: "50%" }}>
+        <div className="box mx-auto" style={{ width: "35%" }}>
             <form onSubmit={handleSubmitNew} className="form">
-                <div className="title">New load form</div>
+                <div className="title">Create load</div>
                 <div className="has-text-grey is-size-4">Pickup Info:</div>
                 {/* pickup_address */}
                 <fieldset className="my-5 is-size-5">
@@ -239,8 +238,8 @@ export const NewLoadForm = ({ freightTypes, syncFreightTypes }) => {
                 </fieldset>
                 {displayHazardMessage}
                 <div className="container">
-                    <button type="submit" className="button is-success">Confirm load</button>
-                    <button type="reset" className="button ml-4" onClick={() => history.push('/loadboard')}><Link to="/loadboard">Cancel Load</Link></button>
+                    <button type="submit" className="button is-success">Post load</button>
+                    <button type="reset" className="button ml-4" onClick={() => history.push('/loadboard')}>Cancel Load</button>
                 </div>
             </form>
         </div>

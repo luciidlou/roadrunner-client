@@ -22,4 +22,8 @@ export const LoadRepository = {
         const res = await fetch(`${Settings.remoteUrl}/loads/${id}`, FetchOptions("PUT", obj))
         return res
     },
+    async delete(id) {
+        const res = await fetch(`${Settings.remoteUrl}/loads/${id}`, FetchOptions("DELETE"))
+        return res
+    }
 }

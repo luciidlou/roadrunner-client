@@ -114,7 +114,7 @@ export const EditLoadForm = ({ freightTypes, syncFreightTypes }) => {
     }
 
     return (
-        <div className="box mx-auto" style={{ width: "50%" }}>
+        <div className="box mx-auto" style={{ width: "35%" }}>
             <form onSubmit={handleSubmitEdit} className="form">
                 <div className="title">Edit load #{loadId}</div>
                 <div className="has-text-grey is-size-4">Pickup Info:</div>
@@ -266,8 +266,8 @@ export const EditLoadForm = ({ freightTypes, syncFreightTypes }) => {
                 </fieldset>
                 {displayHazardMessage}
                 <div className="container">
-                    <button type="submit" className="button is-success">Confirm edit</button>
-                    <button type="reset" className="button ml-4" onClick={() => history.push('/loadboard')}><Link to="/loadboard">Cancel edit</Link></button>
+                    <button type="submit" className="button is-success">Save load</button>
+                    <button type="reset" className="button ml-4" onClick={() => history.push('/loadboard')}>Cancel edit</button>
                 </div>
             </form>
         </div>

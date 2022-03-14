@@ -5,7 +5,7 @@ import { useParams } from "react-router-dom"
 import { LoadRepository } from "../../repositories/LoadRepository"
 import { QueryMaps } from "../../utilities/QueryMaps"
 
-export const LoadDetails = () => {
+export const LoadDetails = ({ syncLoads }) => {
     const { loadId } = useParams()
     const [load, setLoad] = useState({})
     const history = useHistory()
@@ -58,6 +58,12 @@ export const LoadDetails = () => {
         window.open(url)
     }
 
+    const handleDelete = () => {
+        LoadRepository.delete(loadId)
+            .then(syncLoads)
+            .then(() => history.push("/loadboard"))
+    }
+
     return (
         <div className="box mx-auto" style={{ width: "50%" }}>
             <div className="title">Load #{load.id} details</div>
@@ -77,7 +83,7 @@ export const LoadDetails = () => {
                     ?
                     <div className="py-4">
                         <button onClick={() => history.push(`/loads/${loadId}/edit`)} className="button mr-4 is-dark" style={{ width: '80px' }}>Edit</button>
-                        <button className="button is-danger" style={{ width: '80px' }}>Delete</button>
+                        <button onClick={handleDelete} className="button is-danger" style={{ width: '80px' }}>Delete</button>
                     </div>
                     : ""
             }
