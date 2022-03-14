@@ -4,7 +4,10 @@
         "dropoff",
         "Dropoff",
         "fleetmanager",
+        "freighttypes",
         "loadboard",
-        "loadmanager"
+        "loadmanager",
+        "Massassachusetts",
+        "newload"
     ]
 }
