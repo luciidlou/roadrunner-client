@@ -5,6 +5,7 @@ import { LoadRepository } from "../../repositories/LoadRepository"
 import { EditLoadForm } from "../loads/EditLoadForm"
 import { LoadBoard } from "../loads/LoadBoard"
 import { LoadDetails } from "../loads/LoadDetails"
+import { LoadManager } from "../loads/LoadManager"
 import { NewLoadForm } from "../loads/NewLoadForm"
 
 export const LoadRoutes = () => {
@@ -42,6 +43,9 @@ export const LoadRoutes = () => {
             </Route>
             <Route exact path="/loads/:loadId(\d+)">
                 <LoadDetails syncLoads={syncLoads} />
+            </Route>
+            <Route exact path="/loadmanager">
+                <LoadManager loads={loads} />
             </Route>
         </>
     )

@@ -7,7 +7,7 @@ import { LoadRepository } from "../../repositories/LoadRepository"
 import { QueryMaps } from "../../utilities/QueryMaps"
 import { StatesArray } from "../../utilities/StatesArray"
 
-export const EditLoadForm = ({ freightTypes, syncFreightTypes }) => {
+export const EditLoadForm = ({ freightTypes, syncFreightTypes, syncLoads }) => {
     const { loadId } = useParams()
     const history = useHistory()
     const [loadBuilder, setLoadBuilder] = useState({
@@ -110,6 +110,7 @@ export const EditLoadForm = ({ freightTypes, syncFreightTypes }) => {
             loadBuilder.is_hazardous = false
         }
         LoadRepository.update(loadId, loadBuilder)
+            .then(syncLoads)
             .then(() => history.push("/loadboard"))
     }
 
@@ -163,7 +164,7 @@ export const EditLoadForm = ({ freightTypes, syncFreightTypes }) => {
                 <fieldset style={{ borderBottom: "1px solid grey" }} className="my-5 pb-6 is-size-5">
                     <label htmlFor="pickup_datetime">Pickup date/time</label>
                     <input
-                        value={moment(loadBuilder.pickup_datetime).format('YYYY-MM-DDTHH:mm')}
+                        value={moment.utc(loadBuilder.pickup_datetime).format('YYYY-MM-DDTHH:mm')}
                         onChange={handleOnChange}
                         className="input name m-auto"
                         type="datetime-local"
@@ -217,7 +218,7 @@ export const EditLoadForm = ({ freightTypes, syncFreightTypes }) => {
                 <fieldset style={{ borderBottom: "1px solid grey" }} className="my-5 pb-6 is-size-5">
                     <label htmlFor="dropoff_datetime">Dropoff date/time</label>
                     <input
-                        value={moment(loadBuilder.dropoff_datetime).format('YYYY-MM-DDTHH:mm')}
+                        value={moment.utc(loadBuilder.dropoff_datetime).format('YYYY-MM-DDTHH:mm')}
                         onChange={handleOnChange}
                         className="input name m-auto"
                         type="datetime-local"

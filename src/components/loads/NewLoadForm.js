@@ -79,15 +79,20 @@ export const NewLoadForm = ({ freightTypes, syncFreightTypes, syncLoads }) => {
 
     const handleSubmitNew = (event) => {
         event.preventDefault()
-        if (displayHazardMessage !== "") {
-            loadBuilder.is_hazardous = true
+        if (loadBuilder.freight_types?.length === 0) {
+            window.alert("Please define at least one freight type for this load...")
         }
         else {
-            loadBuilder.is_hazardous = false
+            if (displayHazardMessage !== undefined) {
+                loadBuilder.is_hazardous = true
+            }
+            else {
+                loadBuilder.is_hazardous = false
+            }
+            LoadRepository.create(loadBuilder)
+                .then(syncLoads)
+                .then(() => history.push("/loadboard"))
         }
-        LoadRepository.create(loadBuilder)
-            .then(syncLoads)
-            .then(() => history.push("/loadboard"))
     }
 
 
@@ -218,6 +223,7 @@ export const NewLoadForm = ({ freightTypes, syncFreightTypes, syncLoads }) => {
                         required
                     />
                 </fieldset>
+                {/* freight_types */}
                 <fieldset className="mt-5 mb-4 is-size-5">
                     <div>
                         <label htmlFor="distance">Type of freight</label>
@@ -239,7 +245,7 @@ export const NewLoadForm = ({ freightTypes, syncFreightTypes, syncLoads }) => {
                 {displayHazardMessage}
                 <div className="container">
                     <button type="submit" className="button is-success">Post load</button>
-                    <button type="reset" className="button ml-4" onClick={() => history.push('/loadboard')}>Cancel Load</button>
+                    <button type="reset" className="button ml-4" onClick={() => history.push('/loadboard')}>Cancel</button>
                 </div>
             </form>
         </div>
