@@ -48,7 +48,6 @@ export const NavBar = ({ token, setToken, userType, setUserType }) => {
                             </>
                             : ""
                     }
-
                 </div>
                 <div className="navbar-end">
                     <div className="navbar-item">

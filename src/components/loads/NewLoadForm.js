@@ -95,10 +95,6 @@ export const NewLoadForm = ({ freightTypes, syncFreightTypes, syncLoads }) => {
         }
     }
 
-
-
-
-
     return (
         <div className="box mx-auto" style={{ width: "35%" }}>
             <form onSubmit={handleSubmitNew} className="form">
@@ -207,7 +203,7 @@ export const NewLoadForm = ({ freightTypes, syncFreightTypes, syncLoads }) => {
                     routeIsBuilt()
                         ?
                         <div>
-                            <button onClick={drawRoute} className="button is-info">Calculate route</button>
+                            <button onClick={drawRoute} className="button btn-large is-info">Calculate route</button>
                         </div>
                         : ""
                 }

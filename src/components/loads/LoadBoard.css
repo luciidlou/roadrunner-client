@@ -1,15 +1,27 @@
 tbody tr:nth-child(odd) {
     background-color: rgb(221, 221, 221);
 }
+
 .load-row:hover {
     cursor: pointer;
     background-color: rgb(167, 210, 240);
 }
+
 .load-row, .booked {
     height: 80px;
 }
+
 .booked:hover {
     cursor: pointer;
     height: 80px;
     background-color: rgb(140, 243, 162);
+}
+
+.bid-row {
+    height: 30px;
+}
+
+.bid-row:hover {
+    /* cursor: pointer; */
+    background-color: rgb(167, 210, 240);
 }

@@ -9,7 +9,7 @@ import { LoadDetails } from "../loads/LoadDetails"
 import { LoadManager } from "../loads/LoadManager"
 import { NewLoadForm } from "../loads/NewLoadForm"
 
-export const LoadRoutes = ({ userType }) => {
+export const LoadRoutes = ({ userType, trucks }) => {
     const [loads, setLoads] = useState([])
     const [freightTypes, setFreightTypes] = useState([])
 
@@ -43,7 +43,7 @@ export const LoadRoutes = ({ userType }) => {
                 <EditLoadForm freightTypes={freightTypes} syncFreightTypes={syncFreightTypes} syncLoads={syncLoads} />
             </Route>
             <Route exact path="/loads/:loadId(\d+)/bids/create">
-                <BidForm />
+                <BidForm trucks={trucks} />
             </Route>
             <Route exact path="/loads/:loadId(\d+)">
                 <LoadDetails syncLoads={syncLoads} />

@@ -1,20 +1,8 @@
-import { useEffect, useState } from "react"
 import { useHistory } from "react-router-dom"
-import { TruckRepository } from "../../repositories/TruckRepository"
 import "../loads/LoadBoard.css"
 
-export const FleetManager = () => {
-    const [trucks, setTrucks] = useState([])
+export const FleetManager = ({ trucks }) => {
     const history = useHistory()
-
-    const syncTrucks = () => {
-        TruckRepository.list()
-            .then(setTrucks)
-    }
-
-    useEffect(() => {
-        syncTrucks()
-    }, [])
 
     return (
         <>
