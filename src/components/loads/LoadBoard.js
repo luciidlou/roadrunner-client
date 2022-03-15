@@ -5,14 +5,19 @@ import { useHistory } from "react-router-dom"
 import { LoadRepository } from "../../repositories/LoadRepository"
 import "./LoadBoard.css"
 
-export const LoadBoard = ({ loads }) => {
+export const LoadBoard = ({ loads, userType }) => {
     const history = useHistory()
 
     return (
         <>
             <div className="is-size-3 mb-1">Load Board</div>
             <div className="box" style={{ width: "fit-content" }}>
-                <button className="button btn-large is-success mt-2 mb-5" onClick={() => history.push("/newload")}>Load Creator</button>
+                {
+                    userType === "distributor"
+                        ?
+                        <button className="button btn-large is-success mt-2 mb-5" onClick={() => history.push("/newload")}>Load Creator</button>
+                        : ""
+                }
                 <table className="table">
                     <thead>
                         <tr>

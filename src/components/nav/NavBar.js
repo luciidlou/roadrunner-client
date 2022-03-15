@@ -43,7 +43,7 @@ export const NavBar = ({ token, setToken, userType, setUserType }) => {
                                         ?
                                         <Link to="/loadmanager" className="navbar-item" onClick={showMobileNavbar}>Load Manager</Link>
                                         :
-                                        <Link to="/loadmanager" className="navbar-item" onClick={showMobileNavbar}>Fleet Manager</Link>
+                                        <Link to="/fleetmanager" className="navbar-item" onClick={showMobileNavbar}>Fleet Manager</Link>
                                 }
                             </>
                             : ""

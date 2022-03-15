@@ -116,7 +116,16 @@ export const LoadDetails = ({ syncLoads }) => {
                         }
                         <button onClick={handleDelete} className="button is-danger">Delete</button>
                     </div>
-                    : ""
+                    : 
+                    <div className="py-4">
+                        {
+                            load.is_booked
+                            ?
+                            <button disabled className="button btn-large is-success has-background-grey has-text-white">Bidding closed</button>
+                            :
+                            <button className="button btn-large is-success" onClick={() => history.push(`/loads/${loadId}/bids/create`)}>Place bid</button>
+                        }
+                    </div>
             }
         </div>
     )

@@ -26,7 +26,7 @@ export const Roadrunner = () => {
                 ?
                 <Route>
                     <NavBar token={token} setToken={setToken} userType={userType} setUserType={setUserType} />
-                    <ApplicationViews />
+                    <ApplicationViews userType={userType} />
                 </Route>
                 :
                 <Redirect to="/login" />
