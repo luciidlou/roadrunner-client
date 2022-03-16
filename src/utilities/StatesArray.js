@@ -12,7 +12,7 @@ export const StatesArray = [
         abbr: 'AZ'
     },
     {
-        state: 'Arizona',
+        state: 'Arkansas',
         abbr: 'AR'
     },
     {

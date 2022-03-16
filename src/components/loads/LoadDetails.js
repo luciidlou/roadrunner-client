@@ -5,7 +5,7 @@ import { useParams } from "react-router-dom"
 import { LoadRepository } from "../../repositories/LoadRepository"
 import { QueryMaps } from "../../utilities/QueryMaps"
 
-export const LoadDetails = ({ syncLoads }) => {
+export const LoadDetails = ({ syncLoads, userType }) => {
     const { loadId } = useParams()
     const [load, setLoad] = useState({})
     const history = useHistory()
@@ -112,18 +112,22 @@ export const LoadDetails = ({ syncLoads }) => {
                                 ?
                                 <button disabled className="button mr-4 btn-large has-background-grey has-text-white">Bidding closed</button>
                                 :
-                                <button className="button mr-4 btn-large is-success has-text-white">Manage bids</button>
+                                <button className="button mr-4 btn-large is-success has-text-white" onClick={() => history.push(`/loads/${loadId}/bids`)}>Manage bids</button>
                         }
                         <button onClick={handleDelete} className="button is-danger">Delete</button>
                     </div>
-                    : 
+                    :
                     <div className="py-4">
                         {
+
                             load.is_booked
-                            ?
-                            <button disabled className="button btn-large is-success has-background-grey has-text-white">Bidding closed</button>
-                            :
-                            <button className="button btn-large is-success" onClick={() => history.push(`/loads/${loadId}/bids/create`)}>Place bid</button>
+                                ?
+                                <button disabled className="button btn-large is-success has-background-grey has-text-white">Bidding closed</button>
+                                :
+                                userType === "dispatcher"
+                                    ?
+                                    <button className="button btn-large is-success" onClick={() => history.push(`/loads/${loadId}/bids`)}>Place bid</button>
+                                    : ""
                         }
                     </div>
             }

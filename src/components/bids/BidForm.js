@@ -4,8 +4,9 @@ import { useParams } from "react-router-dom"
 import { BidRepository } from "../../repositories/BidRepository"
 import { LoadRepository } from "../../repositories/LoadRepository"
 import trashIcon from "../../images/trashIcon.png"
+import moment from "moment"
 
-export const BidForm = ({ trucks }) => {
+export const BidForm = ({ trucks, userType }) => {
     const history = useHistory()
     const { loadId } = useParams()
     const [load, setLoad] = useState({})
@@ -36,9 +37,14 @@ export const BidForm = ({ trucks }) => {
     }
 
     const handleSubmitBid = () => {
-        LoadRepository.placeBid(loadId, bidBuilder)
-            .then(syncLoadBids)
-            .then(syncLoad)
+        if (bidBuilder.truck === 0) {
+            window.alert('Please select a truck for this bid')
+        }
+        else {
+            LoadRepository.placeBid(loadId, bidBuilder)
+                .then(syncLoadBids)
+                .then(syncLoad)
+        }
     }
 
     const handleDeleteBid = (id) => {
@@ -63,51 +69,62 @@ export const BidForm = ({ trucks }) => {
                 }
             </div>
             <div className="columns">
-                <div className="column is-4">
-                    <form onSubmit={handleSubmitBid} className="form">
-                        <div className="title">Place bid</div>
-                        {/* dollar_amount */}
-                        <fieldset className="my-5 is-size-5">
-                            <label htmlFor="dollar_amount">Dollar amount</label>
-                            <input
-                                placeholder="$0.00"
-                                onChange={handleOnChange}
-                                className="input name m-auto"
-                                type="number"
-                                step={.01}
-                                inputMode='decimal'
-                                min={0}
-                                name="dollar_amount"
-                                required autoFocus
-                            />
-                        </fieldset>
-                        {/* truck */}
-                        <fieldset className="my-5 is-size-5">
-                            <label htmlFor="truck">Truck</label>
-                            <div>
-                                <select
-                                    onChange={handleOnChange}
-                                    className="dropdown"
-                                    required
-                                    name="truck">
-                                    <option value={0} hidden>Select available truck</option>
-                                    {
-                                        trucks.map(t => {
-                                            if (t.is_assigned) {
-                                                return <option disabled key={t.id} value={t.id}>{t.alias} (Unavailable)</option>
+                {
+                    userType === "dispatcher"
+                        ?
+                        <div className="column is-4">
+                            <div className="title">Bidding is open!</div>
+                            <progress className="progress is-small is-primary" max="100">15%</progress>
+                            <form onSubmit={handleSubmitBid} className="form">
+                                <div className="is-size-3">Place bid</div>
+                                {/* dollar_amount */}
+                                <fieldset className="my-5 is-size-5">
+                                    <label htmlFor="dollar_amount">Dollar amount</label>
+                                    <input
+                                        placeholder="$0.00"
+                                        onChange={handleOnChange}
+                                        className="input name m-auto"
+                                        type="number"
+                                        step={.01}
+                                        inputMode='decimal'
+                                        min={0}
+                                        name="dollar_amount"
+                                        required autoFocus
+                                    />
+                                </fieldset>
+                                {/* truck */}
+                                <fieldset className="my-5 is-size-5">
+                                    <label htmlFor="truck">Truck</label>
+                                    <div>
+                                        <select
+                                            onChange={handleOnChange}
+                                            className="input name m-auto"
+                                            required
+                                            name="truck">
+                                            <option value={0} hidden>Select available truck</option>
+                                            {
+                                                trucks.map(t => {
+                                                    if (t.is_assigned) {
+                                                        return <option disabled key={t.id} value={t.id}>{t.alias} (Unavailable)</option>
+                                                    }
+                                                    return <option key={t.id} value={t.id}>{t.alias} ({t.current_city}, {t.current_state})</option>
+                                                })
                                             }
-                                            return <option key={t.id} value={t.id}>{t.alias} ({t.current_city}, {t.current_state})</option>
-                                        })
-                                    }
-                                </select>
-                            </div>
-                        </fieldset>
-                        <div className="container">
-                            <button type="submit" className="button is-success">Confirm bid</button>
-                            <button type="reset" className="button ml-4" onClick={() => history.push(`/loads/${loadId}`)}>Cancel</button>
+                                        </select>
+                                    </div>
+                                </fieldset>
+                                <div className="container">
+                                    <button type="submit" className="button is-success">Confirm bid</button>
+                                    <button type="reset" className="button ml-4" onClick={() => history.push(`/loads/${loadId}`)}>Cancel</button>
+                                </div>
+                            </form>
                         </div>
-                    </form>
-                </div>
+                        :
+                        <div className="column is-4">
+                            <div className="title">Bidding is open!</div>
+                            <progress className="progress is-small is-primary" max="100">15%</progress>
+                        </div>
+                }
                 <div className="column is-1"></div>
                 <div className="column is-7">
                     <div className="title">Bid history</div>
@@ -120,6 +137,7 @@ export const BidForm = ({ trucks }) => {
                                 <th className="is-size-6">Truck alias</th>
                                 <th className="is-size-6">Trailer</th>
                                 <th className="is-size-6">Truck location</th>
+                                <th className="is-size-6">Timestamp</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -133,6 +151,7 @@ export const BidForm = ({ trucks }) => {
                                             <td>{b.truck?.alias}</td>
                                             <td>{b.truck?.trailer_type?.label}</td>
                                             <td>{b.truck?.current_city}, {b.truck?.current_state}</td>
+                                            <td>{moment.utc(b.timestamp).format('llll')}</td>
                                             {
                                                 b.is_owner
                                                     ?

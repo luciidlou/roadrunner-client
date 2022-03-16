@@ -26,7 +26,7 @@ body {
 
 select {
     border: 1px solid gainsboro;
-    height: 30px;
+    height: 40px;
 }
 #trashIcon {
     width: 24px;

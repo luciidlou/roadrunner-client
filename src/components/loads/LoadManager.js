@@ -10,6 +10,7 @@ export const LoadManager = ({ loads }) => {
         <>
             <div className="is-size-3 mb-1">Load Manager</div>
             <div className="box" style={{ width: "fit-content" }}>
+                <button className="button btn-large is-success mt-2 mb-5" onClick={() => history.push("/loads/create")}>Load Creator</button>
                 <table className="table">
                     <thead>
                         <tr>

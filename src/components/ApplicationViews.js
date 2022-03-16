@@ -5,6 +5,7 @@ import { TruckRepository } from "../repositories/TruckRepository"
 import { Home } from "./home/Home"
 import { LoadRoutes } from "./routes/LoadRoutes"
 import { FleetManager } from "./trucks/FleetManager"
+import { NewTruckForm } from "./trucks/NewTruckForm"
 
 
 export const ApplicationViews = ({ userType }) => {
@@ -28,6 +29,10 @@ export const ApplicationViews = ({ userType }) => {
 
       <Route exact path="/fleetmanager">
         <FleetManager trucks={trucks} />
+      </Route>
+
+      <Route exact path="/trucks/create">
+        <NewTruckForm syncTrucks={syncTrucks} />
       </Route>
 
       <LoadRoutes trucks={trucks} userType={userType} />
