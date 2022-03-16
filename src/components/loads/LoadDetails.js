@@ -4,10 +4,14 @@ import { useHistory } from "react-router-dom"
 import { useParams } from "react-router-dom"
 import { LoadRepository } from "../../repositories/LoadRepository"
 import { QueryMaps } from "../../utilities/QueryMaps"
-
-export const LoadDetails = ({ syncLoads, userType }) => {
+import { BidForm } from "../bids/BidForm"
+import expandIcon from "../../images/expandIcon.png"
+import './LoadDetails.css'
+export const LoadDetails = ({ syncLoads, userType, trucks }) => {
     const { loadId } = useParams()
     const [load, setLoad] = useState({})
+    const [bidManager, toggleBidManager] = useState(false)
+    const [isHovering, toggleIsHovering] = useState(false)
     const history = useHistory()
 
     useEffect(() => {
@@ -27,7 +31,6 @@ export const LoadDetails = ({ syncLoads, userType }) => {
             return "Freight not defined"
         }
     }
-
     const displayFreightTypeList = generateFreightTypeList()
 
 
@@ -45,13 +48,8 @@ export const LoadDetails = ({ syncLoads, userType }) => {
             return false
         }
     }
-
     const isHazardous = checkIfHazardous()
 
-    const displayPickupLocation = `${load.pickup_address} ${load.pickup_city}, ${load.pickup_state}`
-    const displayDropoffLocation = `${load.dropoff_address} ${load.dropoff_city}, ${load.dropoff_state}`
-    const pickupDateTime = moment.utc(load.pickup_datetime).format('llll')
-    const dropoffDateTime = moment.utc(load.dropoff_datetime).format('llll')
 
     const drawRoute = () => {
         let url = ""
@@ -82,8 +80,38 @@ export const LoadDetails = ({ syncLoads, userType }) => {
                 .then(() => history.push("/loadboard"))
     }
 
+    const displayPickupLocation = `${load.pickup_address} ${load.pickup_city}, ${load.pickup_state}`
+    const displayDropoffLocation = `${load.dropoff_address} ${load.dropoff_city}, ${load.dropoff_state}`
+    const pickupDateTime = moment.utc(load.pickup_datetime).format('llll')
+    const dropoffDateTime = moment.utc(load.dropoff_datetime).format('llll')
+
+
     return (
         <div className="box mx-auto" style={{ width: "50%" }}>
+            <div
+                className={isHovering ? "box bid-macros-hover is-flex is-flex-direction-row is-justify-content-space-around" : "box bid-macros is-flex is-flex-direction-row is-justify-content-space-around"}
+                style={{ width: "50%", margin: "2em auto" }}
+                onClick={() => toggleBidManager(!bidManager)}>
+                {
+                    load.bid_macros?.count
+                        ?
+                        <>
+                            <div>Total bids: {load.bid_macros?.count}</div>
+                            <div>Highest bid: ${load.bid_macros?.max}</div>
+                            <div>Average bid: ${load.bid_macros?.avg}</div>
+                            <div>Lowest bid: ${load.bid_macros?.min}</div>
+                            <div>
+                                <img
+                                    className={bidManager ? "is-clickable expand-icon-rotate" : "is-clickable expand-icon"}
+                                    onMouseEnter={() => toggleIsHovering(true)}
+                                    onMouseLeave={() => toggleIsHovering(false)}
+                                    src={expandIcon} />
+                            </div>
+                        </>
+                        : "No bids have been made yet!"
+                }
+            </div>
+
             <div className="title">Load #{load.id} details</div>
             <div className="is-size-5 py-2">Distributor: {load.distributor?.company}</div>
             <div className="is-size-5 py-2">Load status: {load.load_status === null ? "Not booked" : load.load_status?.label}</div>
@@ -98,7 +126,7 @@ export const LoadDetails = ({ syncLoads, userType }) => {
                 {
                     load.load_status?.label !== "Delivered"
                         ?
-                        <button onClick={drawRoute} className="button btn-large is-info">{load.is_booked ? 'Locate truck' : 'View route'}</button>
+                        <button onClick={drawRoute} className="button btn-large has-background-grey has-text-white">{load.is_booked ? 'Locate truck' : 'View route'}</button>
                         : ""
                 }
             </div>
@@ -112,7 +140,7 @@ export const LoadDetails = ({ syncLoads, userType }) => {
                                 ?
                                 <button disabled className="button mr-4 btn-large has-background-grey has-text-white">Bidding closed</button>
                                 :
-                                <button className="button mr-4 btn-large is-success has-text-white" onClick={() => history.push(`/loads/${loadId}/bids`)}>Manage bids</button>
+                                <button className="button mr-4 btn-large is-info" onClick={() => history.push(`/loads/${loadId}/bids`)}>Manage bids</button>
                         }
                         <button onClick={handleDelete} className="button is-danger">Delete</button>
                     </div>
@@ -123,14 +151,17 @@ export const LoadDetails = ({ syncLoads, userType }) => {
                             load.is_booked
                                 ?
                                 <button disabled className="button btn-large is-success has-background-grey has-text-white">Bidding closed</button>
-                                :
-                                userType === "dispatcher"
-                                    ?
-                                    <button className="button btn-large is-success" onClick={() => history.push(`/loads/${loadId}/bids`)}>Place bid</button>
-                                    : ""
+                                // :
+                                // userType === "dispatcher"
+                                //     ?
+                                //     <button className="button btn-large is-info" onClick={() => history.push(`/loads/${loadId}/bids`)}>Place bid</button>
+                                : ""
                         }
                     </div>
             }
+
+            {bidManager && <BidForm trucks={trucks} userType={userType} />}
+
         </div>
     )
 }

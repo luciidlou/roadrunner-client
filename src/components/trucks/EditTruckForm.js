@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react"
+import { useParams } from "react-router-dom"
 import { useHistory } from "react-router-dom"
-import { EndorsementRepository } from "../../repositories/EndorsementRepository"
-import { TrailerTypeRepository } from "../../repositories/TrailerTypeRepository"
 import { TruckRepository } from "../../repositories/TruckRepository"
 import { StatesArray } from "../../utilities/StatesArray"
 
-export const NewTruckForm = ({ endorsements, trailerTypes, syncTrucks, syncEndorsements }) => {
+
+export const EditTruckForm = ({ endorsements, trailerTypes, syncTrucks, syncEndorsements }) => {
     const history = useHistory()
+    const { truckId } = useParams()
     const [truckBuilder, setTruckBuilder] = useState({
         alias: "",
         trailer_type: 0,
@@ -14,6 +15,25 @@ export const NewTruckForm = ({ endorsements, trailerTypes, syncTrucks, syncEndor
         current_state: "",
         endorsements: []
     })
+
+    useEffect(() => {
+        TruckRepository.retrieve(truckId)
+            .then(truck => {
+                const endorsementIdArr = []
+
+                if (truck.endorsements?.length > 0) {
+                    truck.endorsements.forEach(e => endorsementIdArr.push(e.id))
+                }
+
+                setTruckBuilder({
+                    alias: truck.alias,
+                    trailer_type: truck.trailer_type?.id,
+                    current_city: truck.current_city,
+                    current_state: truck.current_state,
+                    endorsements: endorsementIdArr
+                })
+            })
+    }, [])
 
     const handleEndorsementTags = (e) => {
         if (!truckBuilder.endorsements.includes(e.id)) {
@@ -35,24 +55,25 @@ export const NewTruckForm = ({ endorsements, trailerTypes, syncTrucks, syncEndor
         setTruckBuilder(copy)
     }
 
-    const handleSubmitNew = (event) => {
+    const handleSubmitEdit = (event) => {
         event.preventDefault()
         if (truckBuilder.trailer_type === 0) {
             window.alert("Please specify ")
         }
-        TruckRepository.create(truckBuilder)
+        TruckRepository.update(truckId, truckBuilder)
             .then(syncTrucks)
-            .then(() => history.push('/fleetmanager'))
+            .then(() => history.push(`/fleetmanager`))
     }
 
     return (
         <div className="box mx-auto" style={{ width: "35%" }}>
-            <form onSubmit={handleSubmitNew} className="form">
+            <form onSubmit={handleSubmitEdit} className="form">
                 <div className="title">Add truck</div>
                 {/* alias */}
                 <fieldset className="my-5 is-size-5">
                     <label htmlFor="alias">Alias</label>
                     <input
+                        value={truckBuilder.alias}
                         onChange={handleOnChange}
                         className="input name m-auto"
                         type="text"
@@ -65,6 +86,7 @@ export const NewTruckForm = ({ endorsements, trailerTypes, syncTrucks, syncEndor
                     <label htmlFor="trailer_type">Current trailer</label>
                     <div>
                         <select
+                            value={truckBuilder.trailer_type}
                             onChange={handleOnChange}
                             className="input name m-aut"
                             required
@@ -82,17 +104,19 @@ export const NewTruckForm = ({ endorsements, trailerTypes, syncTrucks, syncEndor
                 <fieldset className="my-5 is-size-5">
                     <label htmlFor="current_city">Current city</label>
                     <input
+                        value={truckBuilder.current_city}
                         onChange={handleOnChange}
                         className="input name m-auto"
                         type="text"
                         name="current_city"
                         required
-                    />
+                        />
                 </fieldset>
                 {/* current_state */}
                 <fieldset className="my-5 is-size-5">
                     <label htmlFor="current_state">Current state</label>
                     <select
+                        value={truckBuilder.current_state}
                         onChange={handleOnChange}
                         className="input name m-auto"
                         name="current_state"
@@ -125,8 +149,8 @@ export const NewTruckForm = ({ endorsements, trailerTypes, syncTrucks, syncEndor
                     }
                 </fieldset>
                 <div className="container">
-                    <button type="submit" className="button is-success">Add to fleet</button>
-                    <button type="reset" className="button ml-4" onClick={() => history.push('/loadboard')}>Cancel</button>
+                    <button type="submit" className="button is-success">Confirm edit</button>
+                    <button type="reset" className="button ml-4" onClick={() => history.push(`/trucks/${truckId}`)}>Cancel</button>
                 </div>
             </form>
         </div>

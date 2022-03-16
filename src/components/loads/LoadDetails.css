@@ -1,0 +1,17 @@
+.bid-macros {
+    background-color: rgb(85, 167, 235);
+    color: antiquewhite;
+}
+.bid-macros-hover {
+    background-color: rgb(38, 105, 160);
+    color: antiquewhite;
+}
+.expand-icon {
+    width: 30px;
+    height: 30px;
+}
+.expand-icon-rotate {
+    width: 30px;
+    height: 30px;
+    transform: rotate(180deg);
+}

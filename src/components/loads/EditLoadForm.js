@@ -268,7 +268,7 @@ export const EditLoadForm = ({ freightTypes, syncFreightTypes, syncLoads }) => {
                 {displayHazardMessage}
                 <div className="container">
                     <button type="submit" className="button is-success">Save load</button>
-                    <button type="reset" className="button ml-4" onClick={() => history.push('/loadboard')}>Cancel edit</button>
+                    <button type="reset" className="button ml-4" onClick={() => history.push(`/loads/${loadId}`)}>Cancel edit</button>
                 </div>
             </form>
         </div>

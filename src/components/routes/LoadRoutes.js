@@ -42,11 +42,11 @@ export const LoadRoutes = ({ userType, trucks }) => {
             <Route exact path="/loads/:loadId(\d+)/edit">
                 <EditLoadForm freightTypes={freightTypes} syncFreightTypes={syncFreightTypes} syncLoads={syncLoads} />
             </Route>
-            <Route exact path="/loads/:loadId(\d+)/bids">
+            {/* <Route exact path="/loads/:loadId(\d+)/bids">
                 <BidForm trucks={trucks} userType={userType} />
-            </Route>
+            </Route> */}
             <Route exact path="/loads/:loadId(\d+)">
-                <LoadDetails syncLoads={syncLoads} userType={userType} />
+                <LoadDetails syncLoads={syncLoads} userType={userType} trucks={trucks} />
             </Route>
             <Route exact path="/loadmanager">
                 <LoadManager loads={loads} />
