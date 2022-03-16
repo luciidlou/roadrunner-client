@@ -4,8 +4,7 @@ import { Route } from "react-router-dom"
 import { TruckRepository } from "../repositories/TruckRepository"
 import { Home } from "./home/Home"
 import { LoadRoutes } from "./routes/LoadRoutes"
-import { FleetManager } from "./trucks/FleetManager"
-import { NewTruckForm } from "./trucks/NewTruckForm"
+import { TruckRoutes } from "./routes/TruckRoutes"
 
 
 export const ApplicationViews = ({ userType }) => {
@@ -27,13 +26,7 @@ export const ApplicationViews = ({ userType }) => {
         <Home />
       </Route>
 
-      <Route exact path="/fleetmanager">
-        <FleetManager trucks={trucks} />
-      </Route>
-
-      <Route exact path="/trucks/create">
-        <NewTruckForm syncTrucks={syncTrucks} />
-      </Route>
+      <TruckRoutes trucks={trucks} syncTrucks={syncTrucks} />
 
       <LoadRoutes trucks={trucks} userType={userType} />
     </main>

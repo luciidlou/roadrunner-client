@@ -9,10 +9,11 @@ import moment from "moment"
 export const BidForm = ({ trucks, userType }) => {
     const history = useHistory()
     const { loadId } = useParams()
+    const [warning, toggleWarning] = useState(false)
     const [load, setLoad] = useState({})
     const [loadBids, setLoadBids] = useState([])
     const [bidBuilder, setBidBuilder] = useState({
-        dollar_amount: 0,
+        dollar_amount: 0.00,
         truck: 0
     })
 
@@ -36,7 +37,8 @@ export const BidForm = ({ trucks, userType }) => {
         setBidBuilder(copy)
     }
 
-    const handleSubmitBid = () => {
+    const handleSubmitBid = (e) => {
+        e.preventDefault()
         if (bidBuilder.truck === 0) {
             window.alert('Please select a truck for this bid')
         }
@@ -44,35 +46,28 @@ export const BidForm = ({ trucks, userType }) => {
             LoadRepository.placeBid(loadId, bidBuilder)
                 .then(syncLoadBids)
                 .then(syncLoad)
+                .then(() => setBidBuilder({
+                    dollar_amount: 0.00,
+                    truck: 0
+                }))
         }
     }
 
     const handleDeleteBid = (id) => {
-        BidRepository.delete(id)
-            .then(syncLoadBids)
-            .then(syncLoad)
+        if (window.confirm(`Are you sure you want to delete your bid?`) == true)
+            BidRepository.delete(id)
+                .then(syncLoadBids)
+                .then(syncLoad)
     }
 
+
     return (
-        <div className="box mx-auto" style={{ width: "60%" }}>
-            <div className="box is-flex is-flex-direction-row is-justify-content-space-around has-background-info has-text-white" style={{ width: "50%", margin: "2em auto" }}>
-                {
-                    load.bid_macros?.count
-                        ?
-                        <>
-                            <div>Total bids: {load.bid_macros?.count}</div>
-                            <div>Highest bid: ${load.bid_macros?.max}</div>
-                            <div>Average bid: ${load.bid_macros?.avg}</div>
-                            <div>Lowest bid: ${load.bid_macros?.min}</div>
-                        </>
-                        : "No bids have been made yet!"
-                }
-            </div>
+        <>
             <div className="columns">
                 {
                     userType === "dispatcher"
                         ?
-                        <div className="column is-4">
+                        <div className="column is-3">
                             <div className="title">Bidding is open!</div>
                             <progress className="progress is-small is-primary" max="100">15%</progress>
                             <form onSubmit={handleSubmitBid} className="form">
@@ -81,15 +76,15 @@ export const BidForm = ({ trucks, userType }) => {
                                 <fieldset className="my-5 is-size-5">
                                     <label htmlFor="dollar_amount">Dollar amount</label>
                                     <input
-                                        placeholder="$0.00"
+                                        value={bidBuilder.dollar_amount}
                                         onChange={handleOnChange}
                                         className="input name m-auto"
                                         type="number"
                                         step={.01}
                                         inputMode='decimal'
-                                        min={0}
+                                        min={0.00}
                                         name="dollar_amount"
-                                        required autoFocus
+                                        required
                                     />
                                 </fieldset>
                                 {/* truck */}
@@ -97,6 +92,7 @@ export const BidForm = ({ trucks, userType }) => {
                                     <label htmlFor="truck">Truck</label>
                                     <div>
                                         <select
+                                            value={bidBuilder.truck}
                                             onChange={handleOnChange}
                                             className="input name m-auto"
                                             required
@@ -115,7 +111,6 @@ export const BidForm = ({ trucks, userType }) => {
                                 </fieldset>
                                 <div className="container">
                                     <button type="submit" className="button is-success">Confirm bid</button>
-                                    <button type="reset" className="button ml-4" onClick={() => history.push(`/loads/${loadId}`)}>Cancel</button>
                                 </div>
                             </form>
                         </div>
@@ -126,9 +121,9 @@ export const BidForm = ({ trucks, userType }) => {
                         </div>
                 }
                 <div className="column is-1"></div>
-                <div className="column is-7">
+                <div className="column is-8">
                     <div className="title">Bid history</div>
-                    <table className="table">
+                    <table className={"table is-bordered"}>
                         <thead>
                             <tr>
                                 <th className="is-size-6">Bid #</th>
@@ -138,25 +133,33 @@ export const BidForm = ({ trucks, userType }) => {
                                 <th className="is-size-6">Trailer</th>
                                 <th className="is-size-6">Truck location</th>
                                 <th className="is-size-6">Timestamp</th>
+                                <th className="is-size-6">❌</th>
                             </tr>
                         </thead>
                         <tbody>
                             {
                                 loadBids.map(b => {
                                     return (
-                                        <tr className="bid-row" key={b.id}>
+                                        <tr className={"bid-row"} key={b.id}>
                                             <td>{b.id}</td>
                                             <td>${b.dollar_amount}</td>
                                             <td>{b.dispatcher?.company}</td>
                                             <td>{b.truck?.alias}</td>
                                             <td>{b.truck?.trailer_type?.label}</td>
                                             <td>{b.truck?.current_city}, {b.truck?.current_state}</td>
-                                            <td>{moment.utc(b.timestamp).format('llll')}</td>
+                                            <td >{moment(b.timestamp).format('llll')}</td>
                                             {
                                                 b.is_owner
                                                     ?
-                                                    <td><img onClick={() => handleDeleteBid(b.id)} id="trashIcon" src={trashIcon} /></td>
-                                                    : ""
+                                                    <td>
+                                                        <img
+                                                            className={warning ? "bid-row has-background-danger" : "bid-row"}
+                                                            onMouseEnter={() => toggleWarning(true)}
+                                                            onMouseLeave={() => toggleWarning(false)}
+                                                            onClick={() => handleDeleteBid(b.id)} id="trashIcon" src={trashIcon}
+                                                        />
+                                                    </td>
+                                                    : <td></td>
                                             }
                                         </tr>
                                     )
@@ -166,6 +169,6 @@ export const BidForm = ({ trucks, userType }) => {
                     </table>
                 </div>
             </div>
-        </div>
+        </>
     )
 }

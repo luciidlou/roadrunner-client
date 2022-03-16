@@ -1,6 +1,6 @@
 import moment from "moment"
 import { useHistory } from "react-router-dom"
-import "./LoadBoard.css"
+import "../Table.css"
 
 export const LoadManager = ({ loads }) => {
     const history = useHistory()

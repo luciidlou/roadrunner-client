@@ -3,7 +3,7 @@ import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
 import { useHistory } from "react-router-dom"
 import { LoadRepository } from "../../repositories/LoadRepository"
-import "./LoadBoard.css"
+import "../Table.css"
 
 export const LoadBoard = ({ loads, userType }) => {
     const history = useHistory()
