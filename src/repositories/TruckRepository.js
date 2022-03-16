@@ -5,5 +5,9 @@ export const TruckRepository = {
     async list() {
         const res = await fetch(`${Settings.remoteUrl}/trucks`, FetchOptions())
         return await res.json()
+    },
+    async create(obj) {
+        const res = await fetch(`${Settings.remoteUrl}/trucks`, FetchOptions("POST", obj))
+        return await res.json()
     }
 }

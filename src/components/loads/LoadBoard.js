@@ -12,18 +12,12 @@ export const LoadBoard = ({ loads, userType }) => {
         <>
             <div className="is-size-3 mb-1">Load Board</div>
             <div className="box" style={{ width: "fit-content" }}>
-                {
-                    userType === "distributor"
-                        ?
-                        <button className="button btn-large is-success mt-2 mb-5" onClick={() => history.push("/newload")}>Load Creator</button>
-                        : ""
-                }
-                <table className="table">
+                <table className="table is-bordered">
                     <thead>
                         <tr>
                             <th className="is-size-5">Load ID</th>
                             <th className="is-size-5">Distributor</th>
-                            <th className="is-size-5">Freight Types</th>
+                            <th className="is-size-5" style={{ width: "350px" }}>Freight Types</th>
                             <th className="is-size-5">Pickup address</th>
                             <th className="is-size-5">Pickup city</th>
                             <th className="is-size-5">Pickup state</th>
