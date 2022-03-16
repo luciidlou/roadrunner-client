@@ -25,5 +25,9 @@ export const LoadRepository = {
     async delete(id) {
         const res = await fetch(`${Settings.remoteUrl}/loads/${id}`, FetchOptions("DELETE"))
         return res
+    },
+    async placeBid(id, obj) {
+        const res = await fetch(`${Settings.remoteUrl}/loads/${id}/placebid`, FetchOptions("POST", obj))
+        return await res.json()
     }
 }

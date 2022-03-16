@@ -6,7 +6,7 @@ import { useHistory } from 'react-router-dom'
 import { useRef } from 'react'
 
 
-export const NavBar = ({token, setToken, userType, setUserType}) => {
+export const NavBar = ({ token, setToken, userType, setUserType }) => {
     const history = useHistory()
     const navbar = useRef()
     const hamburger = useRef()
@@ -20,7 +20,7 @@ export const NavBar = ({token, setToken, userType, setUserType}) => {
         <nav className="navbar has-background-grey-lighter mb-3" role="navigation" aria-label="main navigation">
             <div className="navbar-brand">
                 <a className="navbar-item" href="/">
-                    <img src={logo2} height="3rem" /> <h1 className="title is-4">Roadrunner</h1>
+                    <img src={logo2} height="3rem" /> <h1 className="title is-3 pl-3">Roadrunner</h1>
                 </a>
 
                 <a role="button" className="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample" onClick={showMobileNavbar} ref={hamburger}>
@@ -34,21 +34,20 @@ export const NavBar = ({token, setToken, userType, setUserType}) => {
                 <div className="navbar-start">
                     {
                         token
-                        ?
+                            ?
                             <>
                                 <Link to="/dashboard" className="navbar-item" onClick={showMobileNavbar}>Dashboard</Link>
                                 <Link to="/loadboard" className="navbar-item" onClick={showMobileNavbar}>Load Board</Link>
                                 {
                                     userType === "distributor"
-                                    ?
-                                    <Link to="/loadmanager" className="navbar-item" onClick={showMobileNavbar}>Load Manager</Link>
-                                    :
-                                    <Link to="/loadmanager" className="navbar-item" onClick={showMobileNavbar}>Fleet Manager</Link>
+                                        ?
+                                        <Link to="/loadmanager" className="navbar-item" onClick={showMobileNavbar}>Load Manager</Link>
+                                        :
+                                        <Link to="/fleetmanager" className="navbar-item" onClick={showMobileNavbar}>Fleet Manager</Link>
                                 }
                             </>
                             : ""
                     }
-
                 </div>
                 <div className="navbar-end">
                     <div className="navbar-item">

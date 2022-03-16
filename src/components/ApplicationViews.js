@@ -1,10 +1,24 @@
 import React, { useEffect, useState } from "react"
+import { useHistory } from "react-router-dom"
 import { Route } from "react-router-dom"
+import { TruckRepository } from "../repositories/TruckRepository"
 import { Home } from "./home/Home"
 import { LoadRoutes } from "./routes/LoadRoutes"
+import { FleetManager } from "./trucks/FleetManager"
 
 
-export const ApplicationViews = () => {
+export const ApplicationViews = ({ userType }) => {
+  const [trucks, setTrucks] = useState([])
+  const history = useHistory()
+
+  const syncTrucks = () => {
+    TruckRepository.list()
+      .then(setTrucks)
+  }
+
+  useEffect(() => {
+    syncTrucks()
+  }, [])
 
   return (
     <main className="px-2">
@@ -12,7 +26,11 @@ export const ApplicationViews = () => {
         <Home />
       </Route>
 
-      <LoadRoutes />
+      <Route exact path="/fleetmanager">
+        <FleetManager trucks={trucks} />
+      </Route>
+
+      <LoadRoutes trucks={trucks} userType={userType} />
     </main>
   )
 }

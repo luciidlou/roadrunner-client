@@ -1,28 +1,20 @@
 import moment from "moment"
-import { useEffect, useState } from "react"
-import { Link } from "react-router-dom"
 import { useHistory } from "react-router-dom"
-import { LoadRepository } from "../../repositories/LoadRepository"
 import "./LoadBoard.css"
 
-export const LoadBoard = ({ loads, userType }) => {
+export const LoadManager = ({ loads }) => {
     const history = useHistory()
+
 
     return (
         <>
-            <div className="is-size-3 mb-1">Load Board</div>
+            <div className="is-size-3 mb-1">Load Manager</div>
             <div className="box" style={{ width: "fit-content" }}>
-                {
-                    userType === "distributor"
-                        ?
-                        <button className="button btn-large is-success mt-2 mb-5" onClick={() => history.push("/newload")}>Load Creator</button>
-                        : ""
-                }
                 <table className="table">
                     <thead>
                         <tr>
                             <th className="is-size-5">Load ID</th>
-                            <th className="is-size-5">Distributor</th>
+                            <th className="is-size-5">Load Status</th>
                             <th className="is-size-5">Freight Types</th>
                             <th className="is-size-5">Pickup address</th>
                             <th className="is-size-5">Pickup city</th>
@@ -53,11 +45,11 @@ export const LoadBoard = ({ loads, userType }) => {
                                 const displayFreightTypeList = generateFreightTypeList()
 
                                 return (
-                                    !load.is_booked
+                                    load.is_owner
                                         ?
-                                        <tr className="load-row" onClick={() => history.push(`/loads/${load.id}`)} key={load.id}>
+                                        <tr className={load.is_booked ? "booked" : "load-row"} onClick={() => history.push(`/loads/${load.id}`)} key={load.id}>
                                             <td>{load.id}</td>
-                                            <td>{load.distributor?.company}</td>
+                                            <td>{load.load_status === null ? "Not booked" : load.load_status?.label}</td>
                                             <td>{displayFreightTypeList}</td>
                                             <td>{load.pickup_address}</td>
                                             <td>{load.pickup_city}</td>

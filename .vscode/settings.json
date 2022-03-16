@@ -6,9 +6,11 @@
         "Dropoff",
         "fleetmanager",
         "freighttypes",
+        "loadbids",
         "loadboard",
         "loadmanager",
         "Massassachusetts",
-        "newload"
+        "newload",
+        "placebid"
     ]
 }
