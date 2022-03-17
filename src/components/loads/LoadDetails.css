@@ -7,11 +7,11 @@
     color: antiquewhite;
 }
 .expand-icon {
-    width: 30px;
-    height: 30px;
+    width: 35px;
+    height: 35px;
 }
 .expand-icon-rotate {
-    width: 30px;
-    height: 30px;
+    width: 35px;
+    height: 35px;
     transform: rotate(180deg);
 }

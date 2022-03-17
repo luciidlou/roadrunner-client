@@ -1,16 +1,15 @@
 import { useEffect, useState } from "react"
-import { useHistory } from "react-router-dom"
 import { useParams } from "react-router-dom"
 import { BidRepository } from "../../repositories/BidRepository"
 import { LoadRepository } from "../../repositories/LoadRepository"
 import trashIcon from "../../images/trashIcon.png"
+import handshakeIcon from "../../images/handshakeIcon.png"
 import moment from "moment"
 
-export const BidForm = ({ trucks, userType }) => {
-    const history = useHistory()
+export const BidForm = ({ trucks, userType, syncLoad }) => {
     const { loadId } = useParams()
-    const [warning, toggleWarning] = useState(false)
     const [load, setLoad] = useState({})
+    const [warning, toggleWarning] = useState(false)
     const [loadBids, setLoadBids] = useState([])
     const [bidBuilder, setBidBuilder] = useState({
         dollar_amount: 0.00,
@@ -21,15 +20,12 @@ export const BidForm = ({ trucks, userType }) => {
         BidRepository.loadBids(loadId)
             .then(setLoadBids)
     }
-    const syncLoad = () => {
-        LoadRepository.retrieve(loadId)
-            .then(setLoad)
-    }
 
     useEffect(() => {
-        syncLoad()
         syncLoadBids()
-    }, [loadId])
+        LoadRepository.retrieve(loadId)
+            .then(setLoad)
+    }, [loadId]) // eslint-disable-line react-hooks/exhaustive-deps
 
     const handleOnChange = (e) => {
         const copy = { ...bidBuilder }
@@ -54,7 +50,7 @@ export const BidForm = ({ trucks, userType }) => {
     }
 
     const handleDeleteBid = (id) => {
-        if (window.confirm(`Are you sure you want to delete your bid?`) == true)
+        if (window.confirm(`Are you sure you want to delete your bid?`) === true)
             BidRepository.delete(id)
                 .then(syncLoadBids)
                 .then(syncLoad)
@@ -63,7 +59,7 @@ export const BidForm = ({ trucks, userType }) => {
 
     return (
         <>
-            <div className="columns">
+            <div className="columns" style={{ borderTop: "1px solid black", marginTop: "30px", paddingTop: "30px" }}>
                 {
                     userType === "dispatcher"
                         ?
@@ -133,7 +129,7 @@ export const BidForm = ({ trucks, userType }) => {
                                 <th className="is-size-6">Trailer</th>
                                 <th className="is-size-6">Truck location</th>
                                 <th className="is-size-6">Timestamp</th>
-                                <th className="is-size-6">❌</th>
+                                <th className="is-size-6"></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -149,17 +145,34 @@ export const BidForm = ({ trucks, userType }) => {
                                             <td>{b.truck?.current_city}, {b.truck?.current_state}</td>
                                             <td >{moment(b.timestamp).format('llll')}</td>
                                             {
-                                                b.is_owner
+                                                userType === "dispatcher"
                                                     ?
-                                                    <td>
-                                                        <img
-                                                            className={warning ? "bid-row has-background-danger" : "bid-row"}
-                                                            onMouseEnter={() => toggleWarning(true)}
-                                                            onMouseLeave={() => toggleWarning(false)}
-                                                            onClick={() => handleDeleteBid(b.id)} id="trashIcon" src={trashIcon}
-                                                        />
-                                                    </td>
-                                                    : <td></td>
+                                                    b.is_owner
+                                                        ?
+                                                        <td>
+                                                            <img
+                                                                className={warning ? "bid-row has-background-danger" : "bid-row"}
+                                                                // onMouseEnter={() => toggleWarning(true)}
+                                                                // onMouseLeave={() => toggleWarning(false)}
+                                                                onClick={() => handleDeleteBid(b.id)} id="trashIcon" src={trashIcon}
+                                                                alt="trash can"
+                                                            />
+                                                        </td>
+                                                        : <td></td>
+                                                    :
+                                                    load.is_owner
+                                                        ?
+                                                        <td>
+                                                            <img
+                                                                className={warning ? "bid-row has-background-danger" : "bid-row"}
+                                                                // onMouseEnter={() => toggleWarning(true)}
+                                                                // onMouseLeave={() => toggleWarning(false)}
+                                                                onClick={() => handleDeleteBid(b.id)} id="trashIcon" src={handshakeIcon}
+                                                                alt="handshake"
+                                                            />
+                                                        </td>
+                                                        :
+                                                        <td></td>
                                             }
                                         </tr>
                                     )

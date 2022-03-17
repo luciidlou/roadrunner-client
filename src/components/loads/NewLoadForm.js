@@ -1,7 +1,5 @@
 import { useEffect, useState } from "react"
 import { useHistory } from "react-router-dom"
-import { Link } from "react-router-dom"
-import { FreightTypeRepository } from "../../repositories/FreightTypeRepository"
 import { LoadRepository } from "../../repositories/LoadRepository"
 import { QueryMaps } from "../../utilities/QueryMaps"
 import { StatesArray } from "../../utilities/StatesArray"
@@ -25,7 +23,7 @@ export const NewLoadForm = ({ freightTypes, syncFreightTypes, syncLoads }) => {
 
     useEffect(() => {
         syncFreightTypes()
-    }, [])
+    }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
     const handleOnChange = (event) => {
         const copy = { ...loadBuilder }
@@ -72,7 +70,8 @@ export const NewLoadForm = ({ freightTypes, syncFreightTypes, syncLoads }) => {
             return true
     }
 
-    const drawRoute = () => {
+    const drawRoute = (event) => {
+        event.preventDefault()
         const url = QueryMaps(loadBuilder.pickup_city, loadBuilder.pickup_state, loadBuilder.dropoff_city, loadBuilder.dropoff_state)
         window.open(url)
     }
@@ -203,9 +202,12 @@ export const NewLoadForm = ({ freightTypes, syncFreightTypes, syncLoads }) => {
                     routeIsBuilt()
                         ?
                         <div>
-                            <button onClick={drawRoute} className="button btn-large is-info">Calculate route</button>
+                            <button onClick={drawRoute} className="button is-info">Map it!</button>
                         </div>
-                        : ""
+                        :
+                        <div>
+                            <button disabled onClick={drawRoute} className="button is-info">Map it!</button>
+                        </div>
                 }
                 {/* distance */}
                 <fieldset className="my-5 is-size-5">
