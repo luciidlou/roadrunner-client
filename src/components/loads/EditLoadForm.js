@@ -1,7 +1,6 @@
 import moment from "moment"
 import { useEffect, useState } from "react"
 import { useHistory } from "react-router-dom"
-import { Link } from "react-router-dom"
 import { useParams } from "react-router-dom"
 import { LoadRepository } from "../../repositories/LoadRepository"
 import { QueryMaps } from "../../utilities/QueryMaps"
@@ -47,7 +46,7 @@ export const EditLoadForm = ({ freightTypes, syncFreightTypes, syncLoads }) => {
                     freight_types: freightTypeIdArr
                 })
             })
-    }, [])
+    }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
     const handleOnChange = (event) => {
         const copy = { ...loadBuilder }
@@ -96,7 +95,8 @@ export const EditLoadForm = ({ freightTypes, syncFreightTypes, syncLoads }) => {
             return true
     }
 
-    const drawRoute = () => {
+    const drawRoute = (event) => {
+        event.preventDefault()
         const url = QueryMaps(loadBuilder.pickup_city, loadBuilder.pickup_state, loadBuilder.dropoff_city, loadBuilder.dropoff_state)
         window.open(url)
     }
@@ -230,7 +230,7 @@ export const EditLoadForm = ({ freightTypes, syncFreightTypes, syncLoads }) => {
                     routeIsBuilt()
                         ?
                         <div>
-                            <button onClick={drawRoute} className="button btn-large is-info">Calculate route</button>
+                            <button onClick={drawRoute} className="button is-info">Map it!</button>
                         </div>
                         : ""
                 }

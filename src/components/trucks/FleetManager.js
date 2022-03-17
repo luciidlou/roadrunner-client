@@ -6,6 +6,7 @@ export const FleetManager = ({ trucks }) => {
     const history = useHistory()
 
 
+
     return (
         <>
             <div className="is-size-3 mb-1">Fleet Manager</div>
@@ -36,8 +37,24 @@ export const FleetManager = ({ trucks }) => {
                                     }
                                     return endorsementLabelArr.join(", ")
                                 }
-
                                 const displayEndorsementList = generateEndorsementList()
+
+                                const generateTruckStatus = () => {
+                                    const status = truck.current_load?.load_status?.label
+
+                                    if (truck.is_active) {
+                                        if (truck.is_assigned) {
+                                            return status
+                                        }
+                                        else {
+                                            return 'Unassigned'
+                                        }
+                                    }
+                                    else {
+                                        return 'Retired'
+                                    }
+                                }
+                                const truckStatus = generateTruckStatus()
                                 return (
                                     <tr className={truck.is_assigned ? "booked" : "load-row"} onClick={() => history.push(`/trucks/${truck.id}`)} key={truck.id}>
                                         <td>{truck.id}</td>
@@ -45,7 +62,7 @@ export const FleetManager = ({ trucks }) => {
                                         <td>{truck.trailer_type?.label}</td>
                                         <td>{truck.current_city}</td>
                                         <td>{truck.current_state}</td>
-                                        <td>{truck.is_assigned ? status : "Unassigned"}</td>
+                                        <td>{truckStatus}</td>
                                         <td>{truck.endorsements.length > 0 ? displayEndorsementList : "None"}</td>
                                         <td>{moment(truck.created_on).format('ll')}</td>
                                     </tr>

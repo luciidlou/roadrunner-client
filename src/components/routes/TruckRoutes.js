@@ -29,15 +29,25 @@ export const TruckRoutes = ({ trucks, syncTrucks }) => {
             </Route>
 
             <Route exact path="/trucks/create">
-                <NewTruckForm endorsements={endorsements} trailerTypes={trailerTypes} syncTrucks={syncTrucks} syncEndorsements={syncEndorsements} />
+                <NewTruckForm
+                    endorsements={endorsements}
+                    trailerTypes={trailerTypes}
+                    syncTrucks={syncTrucks}
+                    syncEndorsements={syncEndorsements}
+                />
             </Route>
 
             <Route exact path="/trucks/:truckId(\d+)/edit">
-                <EditTruckForm endorsements={endorsements} trailerTypes={trailerTypes} syncTrucks={syncTrucks} syncEndorsements={syncEndorsements} />
+                <EditTruckForm
+                    endorsements={endorsements}
+                    trailerTypes={trailerTypes}
+                    syncTrucks={syncTrucks}
+                    syncEndorsements={syncEndorsements}
+                />
             </Route>
 
             <Route exact path="/trucks/:truckId(\d+)">
-                <TruckDetails />
+                <TruckDetails syncTrucks={syncTrucks} />
             </Route>
         </>
     )

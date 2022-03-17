@@ -10,13 +10,17 @@ import './LoadDetails.css'
 export const LoadDetails = ({ syncLoads, userType, trucks }) => {
     const { loadId } = useParams()
     const [load, setLoad] = useState({})
-    const [bidManager, toggleBidManager] = useState(false)
+    const [bidManager, toggleBidManager] = useState(true)
     const [isHovering, toggleIsHovering] = useState(false)
     const history = useHistory()
 
-    useEffect(() => {
+    const syncLoad = () => {
         LoadRepository.retrieve(loadId)
             .then(setLoad)
+    }
+
+    useEffect(() => {
+        syncLoad()
     }, [loadId])
 
     const generateFreightTypeList = () => {
@@ -74,7 +78,7 @@ export const LoadDetails = ({ syncLoads, userType, trucks }) => {
     }
 
     const handleDelete = () => {
-        if (window.confirm(`Are you sure you want to delete load #${loadId}?`) == true)
+        if (window.confirm(`Are you sure you want to delete load #${loadId}?`) === true)
             LoadRepository.delete(loadId)
                 .then(syncLoads)
                 .then(() => history.push("/loadboard"))
@@ -87,31 +91,7 @@ export const LoadDetails = ({ syncLoads, userType, trucks }) => {
 
 
     return (
-        <div className="box mx-auto" style={{ width: "50%" }}>
-            <div
-                className={isHovering ? "box bid-macros-hover is-flex is-flex-direction-row is-justify-content-space-around" : "box bid-macros is-flex is-flex-direction-row is-justify-content-space-around"}
-                style={{ width: "50%", margin: "2em auto" }}
-                onClick={() => toggleBidManager(!bidManager)}>
-                {
-                    load.bid_macros?.count
-                        ?
-                        <>
-                            <div>Total bids: {load.bid_macros?.count}</div>
-                            <div>Highest bid: ${load.bid_macros?.max}</div>
-                            <div>Average bid: ${load.bid_macros?.avg}</div>
-                            <div>Lowest bid: ${load.bid_macros?.min}</div>
-                            <div>
-                                <img
-                                    className={bidManager ? "is-clickable expand-icon-rotate" : "is-clickable expand-icon"}
-                                    onMouseEnter={() => toggleIsHovering(true)}
-                                    onMouseLeave={() => toggleIsHovering(false)}
-                                    src={expandIcon} />
-                            </div>
-                        </>
-                        : "No bids have been made yet!"
-                }
-            </div>
-
+        <div className="box mx-auto" style={{ width: "65%" }}>
             <div className="title">Load #{load.id} details</div>
             <div className="is-size-5 py-2">Distributor: {load.distributor?.company}</div>
             <div className="is-size-5 py-2">Load status: {load.load_status === null ? "Not booked" : load.load_status?.label}</div>
@@ -136,31 +116,51 @@ export const LoadDetails = ({ syncLoads, userType, trucks }) => {
                     <div className="py-4">
                         <button onClick={() => history.push(`/loads/${loadId}/edit`)} className="button mr-4 is-dark">Edit</button>
                         {
-                            load.is_booked
+                            !load.is_booked
                                 ?
-                                <button disabled className="button mr-4 btn-large has-background-grey has-text-white">Bidding closed</button>
-                                :
-                                <button className="button mr-4 btn-large is-info" onClick={() => history.push(`/loads/${loadId}/bids`)}>Manage bids</button>
-                        }
-                        <button onClick={handleDelete} className="button is-danger">Delete</button>
-                    </div>
-                    :
-                    <div className="py-4">
-                        {
-
-                            load.is_booked
-                                ?
-                                <button disabled className="button btn-large is-success has-background-grey has-text-white">Bidding closed</button>
-                                // :
-                                // userType === "dispatcher"
-                                //     ?
-                                //     <button className="button btn-large is-info" onClick={() => history.push(`/loads/${loadId}/bids`)}>Place bid</button>
+                                <button onClick={handleDelete} className="button is-danger">Delete</button>
                                 : ""
                         }
                     </div>
+                    : ""
             }
+            <div
+                className={isHovering ? "box bid-macros-hover is-flex is-flex-direction-row is-justify-content-space-around" : "box bid-macros is-flex is-flex-direction-row is-justify-content-space-around"}
+                style={{ width: "50%", margin: "2em 0" }}
+                onClick={() => toggleBidManager(!bidManager)}>
+                {
+                    load.bid_macros?.count
+                        ?
+                        <>
+                            <div className="is-size-5">Total bids: {load.bid_macros?.count}</div>
+                            <div className="is-size-5">Highest bid: ${load.bid_macros?.max}</div>
+                            <div className="is-size-5">Average bid: ${load.bid_macros?.avg}</div>
+                            <div className="is-size-5">Lowest bid: ${load.bid_macros?.min}</div>
+                            <div className="is-size-5">
+                                <img
+                                    className={bidManager ? "is-clickable expand-icon-rotate" : "is-clickable expand-icon"}
+                                    onMouseEnter={() => toggleIsHovering(true)}
+                                    onMouseLeave={() => toggleIsHovering(false)}
+                                    src={expandIcon}
+                                    alt="Expand icon" />
+                            </div>
+                        </>
+                        :
+                        <>
+                            <div className="is-size-4">"No bids have been made yet!"</div>
+                            <div className="is-size-5">
+                                <img
+                                    className={bidManager ? "is-clickable expand-icon-rotate" : "is-clickable expand-icon"}
+                                    onMouseEnter={() => toggleIsHovering(true)}
+                                    onMouseLeave={() => toggleIsHovering(false)}
+                                    src={expandIcon}
+                                    alt="Expand icon" />
+                            </div>
+                        </>
+                }
+            </div>
 
-            {bidManager && <BidForm trucks={trucks} userType={userType} />}
+            {bidManager && <BidForm trucks={trucks} userType={userType} syncLoad={syncLoad} load={load} loadId={loadId} />}
 
         </div>
     )

@@ -1,8 +1,5 @@
 import moment from "moment"
-import { useEffect, useState } from "react"
-import { Link } from "react-router-dom"
 import { useHistory } from "react-router-dom"
-import { LoadRepository } from "../../repositories/LoadRepository"
 import "../Table.css"
 
 export const LoadBoard = ({ loads, userType }) => {

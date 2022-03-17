@@ -5,7 +5,7 @@ import { useParams } from "react-router-dom"
 import { TruckRepository } from "../../repositories/TruckRepository"
 import { QueryMaps } from "../../utilities/QueryMaps"
 
-export const TruckDetails = () => {
+export const TruckDetails = ({ syncTrucks }) => {
     const history = useHistory()
     const { truckId } = useParams()
     const [truck, setTruck] = useState({})
@@ -17,7 +17,7 @@ export const TruckDetails = () => {
 
     useEffect(() => {
         syncTruck()
-    }, [truckId])
+    }, [truckId]) // eslint-disable-line react-hooks/exhaustive-deps
 
     const generateEndorsementList = () => {
         const endorsementLabelArr = []
@@ -42,11 +42,13 @@ export const TruckDetails = () => {
             if (window.confirm(`Are you sure you want to retire truck #${truckId} (${truck.alias})?`) === true)
                 TruckRepository.retire(truckId, truck)
                     .then(syncTruck)
-                }
-                else {
+                    .then(syncTrucks)
+        }
+        else {
             if (window.confirm(`Are you sure you want to reactivate truck #${truckId} (${truck.alias})?`) === true)
                 TruckRepository.retire(truckId, truck)
                     .then(syncTruck)
+                    .then(syncTrucks)
         }
     }
 

@@ -33,7 +33,7 @@ export const EditTruckForm = ({ endorsements, trailerTypes, syncTrucks, syncEndo
                     endorsements: endorsementIdArr
                 })
             })
-    }, [])
+    }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
     const handleEndorsementTags = (e) => {
         if (!truckBuilder.endorsements.includes(e.id)) {

@@ -1,7 +1,5 @@
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { useHistory } from "react-router-dom"
-import { EndorsementRepository } from "../../repositories/EndorsementRepository"
-import { TrailerTypeRepository } from "../../repositories/TrailerTypeRepository"
 import { TruckRepository } from "../../repositories/TruckRepository"
 import { StatesArray } from "../../utilities/StatesArray"
 
