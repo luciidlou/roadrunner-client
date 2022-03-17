@@ -10,7 +10,7 @@ import './LoadDetails.css'
 export const LoadDetails = ({ syncLoads, userType, trucks }) => {
     const { loadId } = useParams()
     const [load, setLoad] = useState({})
-    const [bidManager, toggleBidManager] = useState(false)
+    const [bidManager, toggleBidManager] = useState(true)
     const [isHovering, toggleIsHovering] = useState(false)
     const history = useHistory()
 
@@ -115,7 +115,12 @@ export const LoadDetails = ({ syncLoads, userType, trucks }) => {
                     ?
                     <div className="py-4">
                         <button onClick={() => history.push(`/loads/${loadId}/edit`)} className="button mr-4 is-dark">Edit</button>
-                        <button onClick={handleDelete} className="button is-danger">Delete</button>
+                        {
+                            !load.is_booked
+                                ?
+                                <button onClick={handleDelete} className="button is-danger">Delete</button>
+                                : ""
+                        }
                     </div>
                     : ""
             }
@@ -155,7 +160,7 @@ export const LoadDetails = ({ syncLoads, userType, trucks }) => {
                 }
             </div>
 
-            {bidManager && <BidForm trucks={trucks} userType={userType} syncLoad={syncLoad} />}
+            {bidManager && <BidForm trucks={trucks} userType={userType} syncLoad={syncLoad} load={load} loadId={loadId} />}
 
         </div>
     )

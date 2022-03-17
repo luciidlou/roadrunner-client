@@ -5,10 +5,10 @@ import { LoadRepository } from "../../repositories/LoadRepository"
 import trashIcon from "../../images/trashIcon.png"
 import handshakeIcon from "../../images/handshakeIcon.png"
 import moment from "moment"
+import { useHistory } from "react-router-dom"
 
-export const BidForm = ({ trucks, userType, syncLoad }) => {
-    const { loadId } = useParams()
-    const [load, setLoad] = useState({})
+export const BidForm = ({ trucks, userType, syncLoad, load, loadId }) => {
+    const history = useHistory()
     const [warning, toggleWarning] = useState(false)
     const [loadBids, setLoadBids] = useState([])
     const [bidBuilder, setBidBuilder] = useState({
@@ -23,8 +23,8 @@ export const BidForm = ({ trucks, userType, syncLoad }) => {
 
     useEffect(() => {
         syncLoadBids()
-        LoadRepository.retrieve(loadId)
-            .then(setLoad)
+        // LoadRepository.retrieve(loadId)
+        //     .then(setLoad)
     }, [loadId]) // eslint-disable-line react-hooks/exhaustive-deps
 
     const handleOnChange = (e) => {
@@ -64,8 +64,14 @@ export const BidForm = ({ trucks, userType, syncLoad }) => {
                     userType === "dispatcher"
                         ?
                         <div className="column is-3">
-                            <div className="title">Bidding is open!</div>
-                            <progress className="progress is-small is-primary" max="100">15%</progress>
+                            <div className="title">{load.is_booked ? "Bidding is closed" : "Bidding is open!"}</div>
+                            {
+                                load.is_booked === true
+                                    ?
+                                    <progress class="progress is-danger" value="90" max="100">90%</progress>
+                                    :
+                                    <progress className="progress is-small is-primary" max="100">15%</progress>
+                            }
                             <form onSubmit={handleSubmitBid} className="form">
                                 <div className="is-size-3">Place bid</div>
                                 {/* dollar_amount */}
@@ -111,9 +117,15 @@ export const BidForm = ({ trucks, userType, syncLoad }) => {
                             </form>
                         </div>
                         :
-                        <div className="column is-4">
-                            <div className="title">Bidding is open!</div>
-                            <progress className="progress is-small is-primary" max="100">15%</progress>
+                        <div className="column is-3">
+                            <div className="title">{load.is_booked ? "Bidding is closed" : "Bidding is open!"}</div>
+                            {
+                                load.is_booked === true
+                                    ?
+                                    <progress className="progress is-danger" value="100" max="100">90%</progress>
+                                    :
+                                    <progress className="progress is-small is-primary" max="100">15%</progress>
+                            }
                         </div>
                 }
                 <div className="column is-1"></div>
@@ -129,14 +141,14 @@ export const BidForm = ({ trucks, userType, syncLoad }) => {
                                 <th className="is-size-6">Trailer</th>
                                 <th className="is-size-6">Truck location</th>
                                 <th className="is-size-6">Timestamp</th>
-                                <th className="is-size-6"></th>
+                                <th className="is-size-6">Status</th>
                             </tr>
                         </thead>
                         <tbody>
                             {
                                 loadBids.map(b => {
                                     return (
-                                        <tr className={"bid-row"} key={b.id}>
+                                        <tr className={"bid-row is-clickable"} key={b.id} onClick={() => history.push(`/loads/${b.load?.id}/bids/${b.id}`)}>
                                             <td>{b.id}</td>
                                             <td>${b.dollar_amount}</td>
                                             <td>{b.dispatcher?.company}</td>
@@ -145,38 +157,16 @@ export const BidForm = ({ trucks, userType, syncLoad }) => {
                                             <td>{b.truck?.current_city}, {b.truck?.current_state}</td>
                                             <td >{moment(b.timestamp).format('llll')}</td>
                                             {
-                                                userType === "dispatcher"
-                                                    ?
-                                                    b.is_owner
-                                                        ?
-                                                        <td>
-                                                            <img
-                                                                className={warning ? "bid-row has-background-danger" : "bid-row"}
-                                                                // onMouseEnter={() => toggleWarning(true)}
-                                                                // onMouseLeave={() => toggleWarning(false)}
-                                                                onClick={() => handleDeleteBid(b.id)} id="trashIcon" src={trashIcon}
-                                                                alt="trash can"
-                                                            />
-                                                        </td>
-                                                        : <td></td>
-                                                    :
-                                                    load.is_owner
-                                                        ?
-                                                        <td>
-                                                            <img
-                                                                className={warning ? "bid-row has-background-danger" : "bid-row"}
-                                                                // onMouseEnter={() => toggleWarning(true)}
-                                                                // onMouseLeave={() => toggleWarning(false)}
-                                                                onClick={() => handleDeleteBid(b.id)} id="trashIcon" src={handshakeIcon}
-                                                                alt="handshake"
-                                                            />
-                                                        </td>
-                                                        :
-                                                        <td></td>
+                                                load.is_booked
+                                                ?
+                                                <td>{b.is_accepted ? "✅" : "❌"}</td>
+                                                :
+                                                <td>N/A</td>
+
                                             }
                                         </tr>
-                                    )
-                                })
+                                        )
+                                    })
                             }
                         </tbody>
                     </table>

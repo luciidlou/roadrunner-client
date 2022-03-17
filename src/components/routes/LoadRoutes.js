@@ -2,6 +2,7 @@ import { useEffect, useState } from "react"
 import { Route } from "react-router-dom"
 import { FreightTypeRepository } from "../../repositories/FreightTypeRepository"
 import { LoadRepository } from "../../repositories/LoadRepository"
+import { BidDetails } from "../bids/BidDetails"
 import { EditLoadForm } from "../loads/EditLoadForm"
 import { LoadBoard } from "../loads/LoadBoard"
 import { LoadDetails } from "../loads/LoadDetails"
@@ -35,18 +36,23 @@ export const LoadRoutes = ({ userType, trucks }) => {
             <Route exact path="/loadboard">
                 <LoadBoard loads={loads} userType={userType} />
             </Route>
+
             <Route exact path="/loads/create">
                 <NewLoadForm freightTypes={freightTypes} syncFreightTypes={syncFreightTypes} syncLoads={syncLoads} />
             </Route>
+
             <Route exact path="/loads/:loadId(\d+)/edit">
                 <EditLoadForm freightTypes={freightTypes} syncFreightTypes={syncFreightTypes} syncLoads={syncLoads} />
             </Route>
-            {/* <Route exact path="/loads/:loadId(\d+)/bids">
-                <BidForm trucks={trucks} userType={userType} />
-            </Route> */}
+
+            <Route exact path="/loads/:loadId(\d+)/bids/:bidId(\d+)">
+                <BidDetails userType={userType} />
+            </Route>
+
             <Route exact path="/loads/:loadId(\d+)">
                 <LoadDetails syncLoads={syncLoads} userType={userType} trucks={trucks} />
             </Route>
+
             <Route exact path="/loadmanager">
                 <LoadManager loads={loads} />
             </Route>
