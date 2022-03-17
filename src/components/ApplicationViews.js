@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react"
 import { Route } from "react-router-dom"
 import { TruckRepository } from "../repositories/TruckRepository"
-import { Home } from "./home/Home"
+import { Dashboard } from "./dashboard/Dashboard"
 import { LoadRoutes } from "./routes/LoadRoutes"
 import { TruckRoutes } from "./routes/TruckRoutes"
 
@@ -21,7 +21,7 @@ export const ApplicationViews = ({ userType }) => {
   return (
     <main className="px-2">
       <Route exact path={["/", "/dashboard"]}>
-        <Home />
+        <Dashboard />
       </Route>
 
       <TruckRoutes trucks={trucks} syncTrucks={syncTrucks} />

@@ -5,7 +5,7 @@ import { useParams } from "react-router-dom"
 import { BidRepository } from "../../repositories/BidRepository"
 import { LoadRepository } from "../../repositories/LoadRepository"
 
-export const BidDetails = ({ userType }) => {
+export const BidDetails = ({ userType, syncLoads }) => {
     const history = useHistory()
     const { loadId } = useParams()
     const { bidId } = useParams()
@@ -23,12 +23,19 @@ export const BidDetails = ({ userType }) => {
         if (bid.is_accepted) {
             if (window.confirm(`Are you sure you want to cancel this booking?`) === true)
                 BidRepository.accept(id, obj)
+                    .then(syncLoads)
                     .then(() => history.push(`/loads/${loadId}`))
         }
         else {
             if (window.confirm(`Are you sure you want to accept this bid?`) === true)
-                BidRepository.accept(id, obj)
-                    .then(() => history.push(`/loads/${loadId}`))
+                if (bid.truck.is_assigned) {
+                    window.alert(`Truck #${bid.truck?.id} (${bid.truck?.alias}) is no longer available`)
+                }
+                else {
+                    BidRepository.accept(id, obj)
+                        .then(syncLoads)
+                        .then(() => history.push(`/loads/${loadId}`))
+                }
         }
     }
 
