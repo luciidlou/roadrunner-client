@@ -23,7 +23,7 @@ Roadrunner is an application that brings distributors and trucking companies tog
 
 I used to work in logistics as the middle-man between distributors and trucking companies. And while there were many aspects of the job that I did enjoy, there was an equal counter-part of dislikes. I believe those feelings and experiences sparked my motivation to build Roadrunner, which takes the place of the middle-man I described above.
 
-I built this application in a two-week sprint using JavaScript with the React framework for the front-end, alongside Python and the Django REST framework for the back-end. One of my goals was to gain a better understanding of server-side fundamentals while focusing on optimization, organization, and scalability. One of the things I really noticed while building my first full-stack web application was how much of the client-side code can become obsolete once you understand how powerful back-end frameworks, like Django, can be! 
+I built this application in a two-week sprint using JavaScript with the React framework for the front-end, alongside Python and the Django REST framework for the back-end. My main goal was to gain a better understanding of server-side fundamentals while focusing on optimization, organization, and scalability. One of the things I really noticed while building my first full-stack web application was how much of the client-side code can become obsolete once you understand how powerful back-end frameworks, like Django, can be! 
  
 ## Features (by user)
 #### Distributors
