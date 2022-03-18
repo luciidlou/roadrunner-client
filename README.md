@@ -1,71 +1,110 @@
-# Getting Started with Create React App
+# Roadrunner
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+> Moving freight one mile at a time 🚚
 
-## Available Scripts
+---
 
-In the project directory, you can run:
+### Table of Contents
 
-### `npm start`
+- [Description](#description)
+- [Features](#features)
+- [Technologies](#technologies)
+- [Installation](#installation)
+- [ERD](#erd)
+- [Demo](#demo)
+- [License](#license)
+- [Author Info](#author-info)
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+---
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Description
 
-### `npm test`
+Roadrunner is an application that brings distributors and trucking companies together. It allows distributors to post loads to the app's "Load Board" component, where dispatchers (app users who represent a trucking company) can then visit that Load Board and place bids on any loads they want. Distributors have full control over what bids they want to accept, and once a bid is accepted, dispatchers are responsible for keeping that load updated for the distributor, and making sure it gets picked up and delivered on time.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+I used to work in logistics as the middle-man between distributors and trucking companies. And while there were many aspects of the job that I did enjoy, there was an equal counter-part of dislikes. I believe those feelings and experiences sparked my motivation to build Roadrunner, which takes the place of the middle-man I described above.
 
-### `npm run build`
+I built this application in a two-week sprint using JavaScript with the React framework for the front-end, alongside Python and the Django REST framework for the back-end. One of my goals was to gain a better understanding of server-side fundamentals while focusing on optimization, organization, and scalability. One of the things I really noticed while building my first full-stack web application was how much of the client-side code can become obsolete once you understand how powerful back-end frameworks, like Django, can be! 
+ 
+## Features (by user)
+#### Distributors
+- Create, update, and delete loads that they need transported
+- Choose which bid they want to accept on the loads they created
+#### Dispatchers
+- Create, update, retire trucks in their fleet
+- Create and delete bids on loads
+- Update status and location of loads they are responsible for
+## Technologies
+- HTML5
+- CSS3
+- Javascript
+- React
+- Python
+- Django
+- Bulma
+- Momentjs
+- Git
+- Github
+- Visual Studio Code
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+---
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+#### Installation
+1. Clone this repository and change to the directory in the terminal.
 
-### `npm run eject`
+```sh
+git clone git@github.com:luciidlou/roadrunner-client.git
+cd roadrunner-client
+```
+2. Access the data
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+<a href="https://github.com/luciidlou/roadrunner-api" target="_blank" rel="noreferrer"><img src="https://img.shields.io/badge/-Click%20Here-blue" alt="Roadrunner API Repository" style="height: 30px !important; width: 100px !important;" /></a>
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+3. Launch the application
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+```sh
+npm install
+npm start
+```
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+---
+### Demo
+<img src=# alt="">
 
-## Learn More
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+#### ERD
+<img src=# alt="">
+---
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## License
 
-### Code Splitting
+MIT License
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+Copyright (c) [2022] [Alex J Lewis]
 
-### Analyzing the Bundle Size
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
 
-### Making a Progressive Web App
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+---
 
-### Advanced Configuration
+## Author Info
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+- Github - [luciidlou](https://github.com/luciidlou)
+- LinkedIn - [Alex Lewis](https://www.linkedin.com/in/alex-lewis22/)
 
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
-# roadrunner-client
+[Back To The Top](#roadrunner)
