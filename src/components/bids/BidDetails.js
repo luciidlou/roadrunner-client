@@ -17,7 +17,7 @@ export const BidDetails = ({ userType, syncLoads }) => {
             .then(setBid)
         LoadRepository.retrieve(loadId)
             .then(setLoad)
-    }, [bidId])
+    }, [bidId]) // eslint-disable-line react-hooks/exhaustive-deps
 
     const handleBidStatus = (id, obj) => {
         if (bid.is_accepted) {

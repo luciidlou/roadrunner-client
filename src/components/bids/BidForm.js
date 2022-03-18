@@ -1,15 +1,11 @@
 import { useEffect, useState } from "react"
-import { useParams } from "react-router-dom"
 import { BidRepository } from "../../repositories/BidRepository"
 import { LoadRepository } from "../../repositories/LoadRepository"
-import trashIcon from "../../images/trashIcon.png"
-import handshakeIcon from "../../images/handshakeIcon.png"
 import moment from "moment"
 import { useHistory } from "react-router-dom"
 
 export const BidForm = ({ trucks, userType, syncLoad, load, loadId }) => {
     const history = useHistory()
-    const [warning, toggleWarning] = useState(false)
     const [loadBids, setLoadBids] = useState([])
     const [bidBuilder, setBidBuilder] = useState({
         dollar_amount: 0.00,
@@ -23,8 +19,6 @@ export const BidForm = ({ trucks, userType, syncLoad, load, loadId }) => {
 
     useEffect(() => {
         syncLoadBids()
-        // LoadRepository.retrieve(loadId)
-        //     .then(setLoad)
     }, [loadId]) // eslint-disable-line react-hooks/exhaustive-deps
 
     const handleOnChange = (e) => {
@@ -49,13 +43,6 @@ export const BidForm = ({ trucks, userType, syncLoad, load, loadId }) => {
         }
     }
 
-    const handleDeleteBid = (id) => {
-        if (window.confirm(`Are you sure you want to delete your bid?`) === true)
-            BidRepository.delete(id)
-                .then(syncLoadBids)
-                .then(syncLoad)
-    }
-
 
     return (
         <>
@@ -68,7 +55,7 @@ export const BidForm = ({ trucks, userType, syncLoad, load, loadId }) => {
                             {
                                 load.is_booked === true
                                     ?
-                                    <progress class="progress is-danger" value="90" max="100">90%</progress>
+                                    <progress class="progress is-danger" value="100" max="100">90%</progress>
                                     :
                                     <progress className="progress is-small is-primary" max="100">15%</progress>
                             }
@@ -105,7 +92,7 @@ export const BidForm = ({ trucks, userType, syncLoad, load, loadId }) => {
                                                     if (t.is_assigned) {
                                                         return <option disabled key={t.id} value={t.id}>{t.alias} (Unavailable)</option>
                                                     }
-                                                    return <option key={t.id} value={t.id}>{t.alias} ({t.current_city}, {t.current_state})</option>
+                                                    return <option key={t.id} value={t.id}>{t.alias} - {t.trailer_type?.label} ({t.current_city}, {t.current_state})</option>
                                                 })
                                             }
                                         </select>
@@ -122,7 +109,7 @@ export const BidForm = ({ trucks, userType, syncLoad, load, loadId }) => {
                             {
                                 load.is_booked === true
                                     ?
-                                    <progress className="progress is-danger" value="100" max="100">90%</progress>
+                                    <progress className="progress is-danger" value="100" max="100"></progress>
                                     :
                                     <progress className="progress is-small is-primary" max="100">15%</progress>
                             }
@@ -158,15 +145,15 @@ export const BidForm = ({ trucks, userType, syncLoad, load, loadId }) => {
                                             <td >{moment(b.timestamp).format('llll')}</td>
                                             {
                                                 load.is_booked
-                                                ?
-                                                <td>{b.is_accepted ? "✅" : "❌"}</td>
-                                                :
-                                                <td>N/A</td>
+                                                    ?
+                                                    <td>{b.is_accepted ? "✅" : "❌"}</td>
+                                                    :
+                                                    <td>N/A</td>
 
                                             }
                                         </tr>
-                                        )
-                                    })
+                                    )
+                                })
                             }
                         </tbody>
                     </table>
