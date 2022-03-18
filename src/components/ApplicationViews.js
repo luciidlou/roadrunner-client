@@ -21,7 +21,7 @@ export const ApplicationViews = ({ userType }) => {
   return (
     <main className="px-2">
       <Route exact path={["/", "/dashboard"]}>
-        <Dashboard />
+        <Dashboard userType={userType} />
       </Route>
 
       <TruckRoutes trucks={trucks} syncTrucks={syncTrucks} />

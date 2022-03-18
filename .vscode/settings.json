@@ -1,5 +1,6 @@
 {
     "cSpell.words": [
+        "changestatus",
         "datetime",
         "DDTHH",
         "dropoff",
@@ -9,6 +10,8 @@
         "loadbids",
         "loadboard",
         "loadmanager",
+        "loadstatus",
+        "loadstatuses",
         "Massassachusetts",
         "newload",
         "noreferrer",

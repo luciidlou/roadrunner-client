@@ -29,5 +29,9 @@ export const LoadRepository = {
     async placeBid(id, obj) {
         const res = await fetch(`${Settings.remoteUrl}/loads/${id}/placebid`, FetchOptions("POST", obj))
         return await res.json()
+    },
+    async changestatus(id, obj) {
+        const res = await fetch(`${Settings.remoteUrl}/loads/${id}/changestatus`, FetchOptions("PUT", obj))
+        return res
     }
 }
