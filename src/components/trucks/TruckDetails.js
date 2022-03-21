@@ -86,7 +86,7 @@ export const TruckDetails = ({ syncTrucks }) => {
                     <div className="is-size-5 py-2">Retired on: {moment(truck.retired_on).format('ll')}</div>
                     : ""
             }
-            <div className="is-size-5 py-2">Load count: 🙃</div>
+            <div className="is-size-5 py-2">Load count: {truck?.load_count}</div>
             <div className="py-4">
                 {
                     truck.truck_status?.label !== "Delivered"
