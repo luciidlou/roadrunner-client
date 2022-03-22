@@ -20,15 +20,12 @@ export const NavBar = ({ token, setToken, userType, setUserType }) => {
         <nav className="navbar has-background-grey-lighter mb-3" role="navigation" aria-label="main navigation">
             <div className="navbar-brand">
                 <a className="navbar-item" href="/">
-                    <img src={logo2} height="3rem" /> <h1 className="title is-3 pl-3">Roadrunner<br></br><p className='is-italic is-size-6 subtitle'>{userType === "distributor" ? "Distributor portal" : "Dispatcher portal"}</p></h1>
+                    <img src={logo2} height="3rem" />
+                    <h1 className="title is-3 pl-3">Roadrunner
+                        <br></br>
+                        <p className='is-italic is-size-6 subtitle'>{userType === "distributor" ? "Distributor portal" : "Dispatcher portal"}</p>
+                    </h1>
                 </a>
-                {/* {
-                    userType === "dispatcher"
-                    ?
-                    <div className='subtitle'>Dispatcher portal</div>
-                    :
-                    <div className='subtitle'>Distributor portal</div>
-                } */}
 
                 <a role="button" className="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample" onClick={showMobileNavbar} ref={hamburger}>
                     <span aria-hidden="true"></span>

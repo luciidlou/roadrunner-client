@@ -1,14 +1,35 @@
 import moment from "moment"
+import { useState } from "react"
 import { useHistory } from "react-router-dom"
+import { StatesArray } from "../../utilities/StatesArray"
 import "../Table.css"
 
 export const LoadBoard = ({ loads, userType }) => {
     const history = useHistory()
+    const [statesFilter, setStatesFilter] = useState("")
 
     return (
         <>
             <div className="is-size-3 mb-1">Load Board</div>
             <div className="box" style={{ width: "fit-content" }}>
+
+                <fieldset className="my-5 is-size-4">
+                    <div className="is-size-6">Filter by state:</div>
+                    <select
+                        onChange={(event) => setStatesFilter(event.target.value)}
+                        className="input name m-auto"
+                        name="dropoff_state"
+                        style={{ width: "180px" }}
+                    >
+                        <option value="">Show all states</option>
+                        {
+                            StatesArray.map(state => {
+                                return <option key={state.abbr} value={state.abbr}>{state.abbr} - {state.state}</option>
+                            })
+                        }
+                    </select>
+                </fieldset>
+
                 <table className="table is-bordered">
                     <thead>
                         <tr>
@@ -43,26 +64,52 @@ export const LoadBoard = ({ loads, userType }) => {
 
                                 const displayFreightTypeList = generateFreightTypeList()
 
-                                return (
-                                    !load.is_booked
-                                        ?
-                                        <tr className="load-row" onClick={() => history.push(`/loads/${load.id}`)} key={load.id}>
-                                            <td>{load.id}</td>
-                                            <td>{load.distributor?.company}</td>
-                                            <td>{displayFreightTypeList}</td>
-                                            <td>{load.pickup_address}</td>
-                                            <td>{load.pickup_city}</td>
-                                            <td>{load.pickup_state}</td>
-                                            <td>{pickupDateTime}</td>
-                                            <td>{load.dropoff_address}</td>
-                                            <td>{load.dropoff_city}</td>
-                                            <td>{load.dropoff_state}</td>
-                                            <td>{dropoffDateTime}</td>
-                                            <td>{load.distance}</td>
-                                            <td>{load.is_hazardous ? "Yes" : "No"}</td>
-                                        </tr>
-                                        : null
-                                )
+                                if (statesFilter !== "") {
+                                    if (load.pickup_state === statesFilter) {
+                                        return (
+                                            !load.is_booked
+                                                ?
+                                                <tr className="load-row" onClick={() => history.push(`/loads/${load.id}`)} key={load.id}>
+                                                    <td>{load.id}</td>
+                                                    <td>{load.distributor?.company}</td>
+                                                    <td>{displayFreightTypeList}</td>
+                                                    <td>{load.pickup_address}</td>
+                                                    <td>{load.pickup_city}</td>
+                                                    <td>{load.pickup_state}</td>
+                                                    <td>{pickupDateTime}</td>
+                                                    <td>{load.dropoff_address}</td>
+                                                    <td>{load.dropoff_city}</td>
+                                                    <td>{load.dropoff_state}</td>
+                                                    <td>{dropoffDateTime}</td>
+                                                    <td>{load.distance}</td>
+                                                    <td>{load.is_hazardous ? "Yes" : "No"}</td>
+                                                </tr>
+                                                : null
+                                        )
+                                    }
+                                }
+                                else {
+                                    return (
+                                        !load.is_booked
+                                            ?
+                                            <tr className="load-row" onClick={() => history.push(`/loads/${load.id}`)} key={load.id}>
+                                                <td>{load.id}</td>
+                                                <td>{load.distributor?.company}</td>
+                                                <td>{displayFreightTypeList}</td>
+                                                <td>{load.pickup_address}</td>
+                                                <td>{load.pickup_city}</td>
+                                                <td>{load.pickup_state}</td>
+                                                <td>{pickupDateTime}</td>
+                                                <td>{load.dropoff_address}</td>
+                                                <td>{load.dropoff_city}</td>
+                                                <td>{load.dropoff_state}</td>
+                                                <td>{dropoffDateTime}</td>
+                                                <td>{load.distance}</td>
+                                                <td>{load.is_hazardous ? "Yes" : "No"}</td>
+                                            </tr>
+                                            : null
+                                    )
+                                }
                             })
                         }
                     </tbody>
