@@ -24,7 +24,7 @@ export const ApplicationViews = ({ userType }) => {
         <Dashboard userType={userType} />
       </Route>
 
-      <TruckRoutes trucks={trucks} syncTrucks={syncTrucks} />
+      <TruckRoutes trucks={trucks} syncTrucks={syncTrucks} userType={userType} />
 
       <LoadRoutes trucks={trucks} userType={userType} />
     </main>

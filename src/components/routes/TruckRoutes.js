@@ -7,7 +7,7 @@ import { FleetManager } from "../trucks/FleetManager"
 import { NewTruckForm } from "../trucks/NewTruckForm"
 import { TruckDetails } from "../trucks/TruckDetails"
 
-export const TruckRoutes = ({ trucks, syncTrucks }) => {
+export const TruckRoutes = ({ trucks, syncTrucks, userType }) => {
     const [trailerTypes, setTrailerTypes] = useState([])
     const [endorsements, setEndorsements] = useState([])
 
@@ -47,7 +47,7 @@ export const TruckRoutes = ({ trucks, syncTrucks }) => {
             </Route>
 
             <Route exact path="/trucks/:truckId(\d+)">
-                <TruckDetails syncTrucks={syncTrucks} />
+                <TruckDetails syncTrucks={syncTrucks} userType={userType} />
             </Route>
         </>
     )

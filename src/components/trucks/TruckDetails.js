@@ -5,7 +5,7 @@ import { useParams } from "react-router-dom"
 import { TruckRepository } from "../../repositories/TruckRepository"
 import { QueryMaps } from "../../utilities/QueryMaps"
 
-export const TruckDetails = ({ syncTrucks }) => {
+export const TruckDetails = ({ syncTrucks, userType }) => {
     const history = useHistory()
     const { truckId } = useParams()
     const [truck, setTruck] = useState({})
@@ -73,6 +73,7 @@ export const TruckDetails = ({ syncTrucks }) => {
         <div className={truck.is_active ? "box mx-auto" : "box mx-auto has-background-red-light has-text-grey-light"} style={{ width: "50%" }}>
             <div className="title">{truck.is_active ? `Truck #${truck.id} details` : `Truck #${truck.id} details (RETIRED)`}</div>
             <div className="is-size-5 py-2">Truck ID: {truck.id}</div>
+            <div className="is-size-5 py-2">Company: {truck.dispatcher?.company}</div>
             <div className="is-size-5 py-2">Alias: {truck.alias}</div>
             <div className="is-size-5 py-2">Current trailer: {truck.trailer_type?.label}</div>
             <div className="is-size-5 py-2">Current city: {truck.is_active ? truck.current_city : "N/A"}</div>
@@ -99,16 +100,21 @@ export const TruckDetails = ({ syncTrucks }) => {
                         : ""
                 }
             </div>
-            <div className="py-4">
-                <button onClick={() => history.push(`/trucks/${truckId}/edit`)} className="button mr-4 is-dark">Edit</button>
-                {
-                    truck.is_active
-                        ?
-                        <button onClick={handleRetire} className="button is-danger">Retire</button>
-                        :
-                        <button onClick={handleRetire} className="button is-danger">Un-retire</button>
-                }
-            </div>
+            {
+                truck.is_owned
+                    ?
+                    <div className="py-4">
+                        <button onClick={() => history.push(`/trucks/${truckId}/edit`)} className="button mr-4 is-dark">Edit</button>
+                        {
+                            truck.is_active
+                                ?
+                                <button onClick={handleRetire} className="button is-danger">Retire</button>
+                                :
+                                <button onClick={handleRetire} className="button is-danger">Un-retire</button>
+                        }
+                    </div>
+                    : ""
+            }
         </div>
     )
 }
