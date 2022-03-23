@@ -25,7 +25,7 @@ export const ApplicationViews = ({ userType }) => {
         <Dashboard userType={userType} />
       </Route>
 
-      <Route exact path="/distributors/:userId(\d+)">
+      <Route exact path="/users/:userId(\d+)">
         <UserDetails userType={userType} />
       </Route>
 

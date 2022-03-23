@@ -1,5 +1,6 @@
 import moment from "moment"
 import { useEffect, useState } from "react"
+import { Link } from "react-router-dom"
 import { useHistory } from "react-router-dom"
 import { useParams } from "react-router-dom"
 import { BidRepository } from "../../repositories/BidRepository"
@@ -50,7 +51,7 @@ export const BidDetails = ({ userType, syncLoads }) => {
             <div className="title">Bid #{bid.id} details</div>
             <div className="is-size-5 py-2">Load # {bid.load?.id}</div>
             <div className="is-size-5 py-2">Offer: ${bid.dollar_amount}</div>
-            <div className="is-size-5 py-2">Dispatcher: {bid.dispatcher?.company} (add rating?)</div>
+            <div className="is-size-5 py-2">Dispatcher: <Link to={`/users/${bid.dispatcher?.id}`}>{bid.dispatcher?.company}</Link></div>
             <div className="is-size-5 py-2">Truck location: {bid.truck?.current_city}, {bid.truck?.current_state}</div>
             <div className="is-size-5 py-2">Trailer: {bid.truck?.trailer_type?.label}</div>
             <div className="is-size-5 py-2">Timestamp: {moment(bid.timestamp).format('llll')}</div>
