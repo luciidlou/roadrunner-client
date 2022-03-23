@@ -4,23 +4,26 @@ import { useHistory } from "react-router-dom"
 import { StatesArray } from "../../utilities/StatesArray"
 import "../Table.css"
 
-export const LoadBoard = ({ loads, userType }) => {
+export const LoadBoard = ({ loads, userType, setCityFilter, syncLoads }) => {
     const history = useHistory()
     const [statesFilter, setStatesFilter] = useState("")
+
+    const handleCitySearch = (event) => {
+        setCityFilter(event.target.value)
+    }
 
     return (
         <>
             <div className="is-size-3 mb-1">Load Board</div>
             <div className="box" style={{ width: "fit-content" }}>
 
-                <fieldset className="my-5 is-size-4">
-                    <div className="is-size-6">Filter by state:</div>
+                <div className="mb-5 is-size-4 is-flex-direction-row">
+                    <label className="is-size-6">Filter by state:</label>
                     <select
                         onChange={(event) => setStatesFilter(event.target.value)}
                         className="input name m-auto"
                         name="dropoff_state"
-                        style={{ width: "180px" }}
-                    >
+                        style={{ width: "180px"}}>
                         <option value="">Show all states</option>
                         {
                             StatesArray.map(state => {
@@ -28,7 +31,17 @@ export const LoadBoard = ({ loads, userType }) => {
                             })
                         }
                     </select>
-                </fieldset>
+                    <label className="is-size-6" style={{marginLeft: "30px"}}>Search by city:</label>
+                    <input
+                        style={{ width: "180px"}}
+                        onChange={handleCitySearch}
+                        className="input name m-auto"
+                        type="text"
+                        name="pickup_city"
+                        required
+                    />
+                </div>
+
 
                 <table className="table is-bordered">
                     <thead>

@@ -33,5 +33,9 @@ export const LoadRepository = {
     async changestatus(id, obj) {
         const res = await fetch(`${Settings.remoteUrl}/loads/${id}/changestatus`, FetchOptions("PUT", obj))
         return res
+    },
+    async searchByCity(criteria) {
+        const res = await fetch(`${Settings.remoteUrl}/loads?q=${criteria}`, FetchOptions())
+        return await res.json()
     }
 }

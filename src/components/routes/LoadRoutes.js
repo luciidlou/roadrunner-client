@@ -11,16 +11,23 @@ import { NewLoadForm } from "../loads/NewLoadForm"
 
 export const LoadRoutes = ({ userType, trucks }) => {
     const [loads, setLoads] = useState([])
+    const [cityFilter, setCityFilter] = useState("")
     const [freightTypes, setFreightTypes] = useState([])
+
+    const syncLoads = () => {
+        if (cityFilter !== "") {
+            LoadRepository.searchByCity(cityFilter)
+                .then(setLoads)
+        }
+        else {
+            LoadRepository.list()
+                .then(setLoads)
+        }
+    }
 
     useEffect(() => {
         syncLoads()
-    }, [])
-
-    const syncLoads = () => {
-        LoadRepository.list()
-            .then(setLoads)
-    }
+    }, [cityFilter])
 
     const syncFreightTypes = () => {
         FreightTypeRepository.list()
@@ -34,7 +41,7 @@ export const LoadRoutes = ({ userType, trucks }) => {
     return (
         <>
             <Route exact path="/loadboard">
-                <LoadBoard loads={loads} userType={userType} />
+                <LoadBoard loads={loads} setCityFilter={setCityFilter} syncLoads={setLoads} />
             </Route>
 
             <Route exact path="/loads/create">
@@ -46,7 +53,7 @@ export const LoadRoutes = ({ userType, trucks }) => {
             </Route>
 
             <Route exact path="/loads/:loadId(\d+)/bids/:bidId(\d+)">
-                <BidDetails userType={userType} syncLoads={syncLoads}/>
+                <BidDetails userType={userType} syncLoads={syncLoads} />
             </Route>
 
             <Route exact path="/loads/:loadId(\d+)">

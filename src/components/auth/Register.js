@@ -16,6 +16,8 @@ export const Register = ({ setToken }) => {
     const verifyPassword = useRef()
     const passwordDialog = useRef()
     const company = useRef()
+    const established = useRef()
+    const about = useRef()
     const [userType, setUserType] = useState("")
 
     const handleRegister = (e) => {
@@ -29,6 +31,8 @@ export const Register = ({ setToken }) => {
                 "password": password.current.value,
                 "email": email.current.value,
                 "company": company.current.value,
+                "about": about.current.value,
+                "established": established.current.value,
                 "user_type": userType
             }
 
@@ -154,6 +158,27 @@ export const Register = ({ setToken }) => {
                                 type="text"
                                 name="company"
                                 placeholder="Enter company..."
+                            />
+                        </fieldset>
+                        {/* about */}
+                        <fieldset className="my-5 is-size-5">
+                            <label htmlFor="about">About</label>
+                            <textarea
+                                ref={about}
+                                className="textarea about m-auto"
+                                type="text"
+                                name="about"
+                                placeholder="Tell us a little about your company!"
+                            />
+                        </fieldset>
+                        {/* established */}
+                        <fieldset className="my-5 is-size-5">
+                            <label htmlFor="established">Established on</label>
+                            <input
+                                ref={established}
+                                className="input established m-auto"
+                                type="date"
+                                name="established"
                             />
                         </fieldset>
                         {/* userType */}

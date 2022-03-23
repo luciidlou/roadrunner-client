@@ -7,6 +7,7 @@ import { QueryMaps } from "../../utilities/QueryMaps"
 import { BidForm } from "../bids/BidForm"
 import expandIcon from "../../images/expandIcon.png"
 import './LoadDetails.css'
+import { Link } from "react-router-dom"
 export const LoadDetails = ({ syncLoads, userType, trucks }) => {
     const { loadId } = useParams()
     const [load, setLoad] = useState({})
@@ -93,7 +94,7 @@ export const LoadDetails = ({ syncLoads, userType, trucks }) => {
     return (
         <div className="box mx-auto" style={{ width: "65%" }}>
             <div className="title">Load #{load.id} details</div>
-            <div className="is-size-5 py-2">Distributor: {load.distributor?.company}</div>
+            <div className="is-size-5 py-2">Distributor: <Link to={`/users/${load.distributor?.id}`}>{load.distributor?.company}</Link></div>
             <div className="is-size-5 py-2">Load status: {load.load_status === null ? "Not booked" : load.load_status?.label}</div>
             <div className="is-size-5 py-2">Freight Types: {displayFreightTypeList}</div>
             <div className="is-size-5 py-2">Pickup location: {displayPickupLocation}</div>
