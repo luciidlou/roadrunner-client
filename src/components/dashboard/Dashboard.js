@@ -1,6 +1,7 @@
 import moment from "moment"
 import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
+import { LoadHistoryRepository } from "../../repositories/LoadHistoryRepository"
 import { LoadRepository } from "../../repositories/LoadRepository"
 import { LoadStatusRepository } from "../../repositories/LoadStatusRepository"
 import { QueryMaps } from "../../utilities/QueryMaps"
@@ -76,121 +77,136 @@ export const Dashboard = ({ userType }) => {
         setStatusBuilder(copy)
     }
 
-    const handleUpdateLoad = (loadId, status, truckId) => {
-        if ((!status.current_city && status.current_state) || ( status.current_city && !status.current_state)) {
+    const handleUpdateLoad = (loadId, status, truck) => {
+        if ((!status.current_city && status.current_state) || (status.current_city && !status.current_state)) {
             window.alert("you can't update location without specifying both city and state")
         }
         else {
-            statusBuilder.truck = truckId
+            statusBuilder.truck = truck.id
             LoadRepository.changestatus(loadId, status)
+            LoadHistoryRepository.create({
+                load: loadId,
+                load_status: status.load_status,
+                city: truck.current_city,
+                state: truck.current_state
+            })
                 .then(syncBookedLoads)
                 .then(() => toggleUpdater(false))
         }
     }
 
     return (
-        <>
-            <div className="is-size-2 mb-5" style={{ borderBottom: "1px solid black" }}>Dashboard</div>
-            <div className="is-flex is-justify-content-space-around">
-                {
-                    bookedLoads.map(l => {
-                        const pickupDatetime = `${moment.utc(l.pickup_datetime).format('dddd')} ${moment.utc(l.pickup_datetime).format('ll')} @ ${moment.utc(l.pickup_datetime).format('LT')}`
-                        const dropoffDatetime = `${moment.utc(l.dropoff_datetime).format('dddd')} ${moment.utc(l.dropoff_datetime).format('ll')} @ ${moment.utc(l.dropoff_datetime).format('LT')}`
+        bookedLoads.length
+            ?
+            <>
+                <div className="is-size-2 mb-5" style={{ borderBottom: "1px solid black" }}>Dashboard</div>
+                <div className="is-flex is-justify-content-space-around">
+                    {
+                        bookedLoads.map(l => {
+                            const pickupDatetime = `${moment.utc(l.pickup_datetime).format('dddd')} ${moment.utc(l.pickup_datetime).format('ll')} @ ${moment.utc(l.pickup_datetime).format('LT')}`
+                            const dropoffDatetime = `${moment.utc(l.dropoff_datetime).format('dddd')} ${moment.utc(l.dropoff_datetime).format('ll')} @ ${moment.utc(l.dropoff_datetime).format('LT')}`
 
-                        return (
-                            <div key={l.id} className="card my-3 " style={{ width: "40%" }}>
-                                <div className="columns">
-                                    <div className="column">
-                                        <div className="card-content">
-                                            <div className="content">
-                                                <div className="title is-3" style={{ marginBottom: "0px" }}><Link to={`/loads/${l.id}`}>Load #{l.id}</Link></div>
-                                                <div className="is-size-5 mt-2 mb-3 is-italic">{l.pickup_city}, {l.pickup_state} ➡ {l.dropoff_city}, {l.dropoff_state}</div>
-                                                <div className="is-size-5 my-3">Distance (miles): {l.distance}</div>
-                                                <div className="is-size-5 my-3">Pickup on: {pickupDatetime}</div>
-                                                <div className="is-size-5 my-3">Dropoff on: {dropoffDatetime}</div>
-                                                <div className="is-size-5 my-3">Distributor: {l.distributor?.company}</div>
-                                                <div className="is-size-5 my-3">Dispatcher: {l.assigned_truck?.dispatcher?.company}</div>
-                                                <div className="is-size-5 my-3">Truck: <Link to={`/trucks/${l.assigned_truck?.id}`}>{l.assigned_truck?.alias}</Link> ({l.assigned_truck?.current_city}, {l.assigned_truck?.current_state})</div>
-                                                <div className="is-size-5 my-3">Status: {l.load_status?.label}</div>
-                                            </div>
-                                            <button onClick={() => drawRoute(l)} className="button btn-large has-background-grey has-text-white mr-2">View route</button>
-                                            <button onClick={() => locateTruck(l)} className="button btn-large has-background-grey has-text-white mr-2">Locate truck</button>
-                                            {
-                                                userType === "dispatcher"
-                                                    ?
-                                                    !updater.open
+                            return (
+                                <div key={l.id} className="card my-3 " style={{ width: "40%" }}>
+                                    <div className="columns">
+                                        <div className="column">
+                                            <div className="card-content">
+                                                <div className="content">
+                                                    <div className="title is-3" style={{ marginBottom: "0px" }}><Link to={`/loads/${l.id}`}>Load #{l.id}</Link></div>
+                                                    <div className="is-size-5 mt-2 mb-3 is-italic">{l.pickup_city}, {l.pickup_state} ➡ {l.dropoff_city}, {l.dropoff_state}</div>
+                                                    <div className="is-size-5 my-3">Distance (miles): {l.distance}</div>
+                                                    <div className="is-size-5 my-3">Pickup on: {pickupDatetime}</div>
+                                                    <div className="is-size-5 my-3">Dropoff on: {dropoffDatetime}</div>
+                                                    <div className="is-size-5 my-3">Distributor: {l.distributor?.company}</div>
+                                                    <div className="is-size-5 my-3">Dispatcher: {l.assigned_truck?.dispatcher?.company}</div>
+                                                    <div className="is-size-5 my-3">Truck: <Link to={`/trucks/${l.assigned_truck?.id}`}>{l.assigned_truck?.alias}</Link> ({l.assigned_truck?.current_city}, {l.assigned_truck?.current_state})</div>
+                                                    <div className="is-size-5 my-3">Status: {l.load_status?.label}</div>
+                                                </div>
+                                                <button onClick={() => drawRoute(l)} className="button btn-large has-background-grey has-text-white mr-2">View route</button>
+                                                <button onClick={() => locateTruck(l)} className="button btn-large has-background-grey has-text-white mr-2">Locate truck</button>
+                                                {
+                                                    userType === "dispatcher"
                                                         ?
-                                                        <button onClick={() => toggleUpdater({ open: true, loadId: l.id })} className="button btn-large is-info mr-2">Update</button>
-                                                        :
-                                                        updater.loadId !== l.id
+                                                        !updater.open
                                                             ?
                                                             <button onClick={() => toggleUpdater({ open: true, loadId: l.id })} className="button btn-large is-info mr-2">Update</button>
-                                                            : ""
-                                                    : ""
-                                            }
+                                                            :
+                                                            updater.loadId !== l.id
+                                                                ?
+                                                                <button onClick={() => toggleUpdater({ open: true, loadId: l.id })} className="button btn-large is-info mr-2">Update</button>
+                                                                : ""
+                                                        : ""
+                                                }
+                                            </div>
                                         </div>
-                                    </div>
-                                    {
-                                        updater.open && updater.loadId === l.id
-                                            ?
-                                            <div className="column px-5">
-                                                <form onSubmit={() => handleUpdateLoad(l.id, statusBuilder, l.assigned_truck?.id)}>
-                                                    {/* current_city */}
-                                                    <fieldset className="my-5 is-size-5">
-                                                        <label htmlFor="current_state">Update city</label>
-                                                        <input
-                                                            onChange={handleOnChange}
-                                                            className="input name m-auto"
-                                                            type="text"
-                                                            name="current_city" />
-                                                    </fieldset>
-                                                    {/* current_state */}
-                                                    <fieldset className="my-5 is-size-5">
-                                                        <label htmlFor="current_state">Update state</label>
-                                                        <select
-                                                            onChange={handleOnChange}
-                                                            className="input name m-auto"
-                                                            name="current_state">
-                                                            <option hidden>Choose state...</option>
-                                                            {
-                                                                StatesArray.map(state => {
-                                                                    return <option key={state.abbr} value={state.abbr}>{state.abbr} - {state.state}</option>
-                                                                })
-                                                            }
-                                                        </select>
-                                                    </fieldset>
-                                                    {/* load_status */}
-                                                    <fieldset className="my-5 is-size-5">
-                                                        <label htmlFor="load_status">Update Status</label>
-                                                        <div>
+                                        {
+                                            updater.open && updater.loadId === l.id
+                                                ?
+                                                <div className="column px-5">
+                                                    <form onSubmit={() => handleUpdateLoad(l.id, statusBuilder, l.assigned_truck)}>
+                                                        {/* current_city */}
+                                                        <fieldset className="my-5 is-size-5">
+                                                            <label htmlFor="current_state">Update city</label>
+                                                            <input
+                                                                onChange={handleOnChange}
+                                                                className="input name m-auto"
+                                                                type="text"
+                                                                name="current_city" />
+                                                        </fieldset>
+                                                        {/* current_state */}
+                                                        <fieldset className="my-5 is-size-5">
+                                                            <label htmlFor="current_state">Update state</label>
                                                             <select
                                                                 onChange={handleOnChange}
-                                                                className="input name m-aut"
-                                                                name="load_status">
-                                                                <option value={0} hidden>Select status</option>
+                                                                className="input name m-auto"
+                                                                name="current_state">
+                                                                <option hidden>Choose state...</option>
                                                                 {
-                                                                    loadStatuses.map(s => {
-                                                                        return <option key={s.id} value={s.id}>{s.label}</option>
+                                                                    StatesArray.map(state => {
+                                                                        return <option key={state.abbr} value={state.abbr}>{state.abbr} - {state.state}</option>
                                                                     })
                                                                 }
                                                             </select>
-                                                        </div>
-                                                    </fieldset>
-                                                    <button type="submit" className="button btn-large is-success mr-2">Confirm</button>
-                                                    <button type="reset" onClick={() => toggleUpdater({ open: false, loadId: 0 })} className="button btn-large is-danger mr-2">Cancel</button>
-                                                </form>
-                                            </div>
-                                            : ""
+                                                        </fieldset>
+                                                        {/* load_status */}
+                                                        <fieldset className="my-5 is-size-5">
+                                                            <label htmlFor="load_status">Update Status</label>
+                                                            <div>
+                                                                <select
+                                                                    onChange={handleOnChange}
+                                                                    className="input name m-aut"
+                                                                    name="load_status">
+                                                                    <option value={0} hidden>Select status</option>
+                                                                    {
+                                                                        loadStatuses.map(s => {
+                                                                            if (s.id < 8) {
+                                                                                return <option key={s.id} value={s.id}>{s.label}</option>
+                                                                            }
+                                                                        })
+                                                                    }
+                                                                </select>
+                                                            </div>
+                                                        </fieldset>
+                                                        <button type="submit" className="button btn-large is-success mr-2">Confirm</button>
+                                                        <button type="reset" onClick={() => toggleUpdater({ open: false, loadId: 0 })} className="button btn-large is-danger mr-2">Cancel</button>
+                                                    </form>
+                                                </div>
+                                                : ""
+                                        }
+                                    </div>
+                                    {
+                                        generateRouteProgress(l)
                                     }
                                 </div>
-                                {
-                                    generateRouteProgress(l)
-                                }
-                            </div>
-                        )
-                    })
-                }
-            </div>
-        </>
+                            )
+                        })
+                    }
+                </div>
+            </>
+            :
+            <>
+                <div className="is-size-2 mb-5" style={{ borderBottom: "1px solid black" }}>Dashboard</div>
+                <div className="is-size-4">{userType === 'distributor' ? "You haven't booked any loads!" : "None of your bids have been accepted!"}</div>
+            </>
     )
 }

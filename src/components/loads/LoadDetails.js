@@ -8,7 +8,7 @@ import { BidForm } from "../bids/BidForm"
 import expandIcon from "../../images/expandIcon.png"
 import './LoadDetails.css'
 import { Link } from "react-router-dom"
-export const LoadDetails = ({ syncLoads, userType, trucks }) => {
+export const LoadDetails = ({ syncLoads, userType, trucks, loadHistory, syncLoadHistory }) => {
     const { loadId } = useParams()
     const [load, setLoad] = useState({})
     const [bidManager, toggleBidManager] = useState(true)
@@ -20,8 +20,10 @@ export const LoadDetails = ({ syncLoads, userType, trucks }) => {
             .then(setLoad)
     }
 
+
     useEffect(() => {
         syncLoad()
+        syncLoadHistory(loadId)
     }, [loadId])
 
     const generateFreightTypeList = () => {
@@ -93,38 +95,79 @@ export const LoadDetails = ({ syncLoads, userType, trucks }) => {
 
     return (
         <div className="box mx-auto" style={{ width: "65%" }}>
-            <div className="title">Load #{load.id} details</div>
-            <div className="is-size-5 py-2">Distributor: <Link to={`/users/${load.distributor?.id}`}>{load.distributor?.company}</Link></div>
-            <div className="is-size-5 py-2">Load status: {load.load_status === null ? "Not booked" : load.load_status?.label}</div>
-            <div className="is-size-5 py-2">Freight Types: {displayFreightTypeList}</div>
-            <div className="is-size-5 py-2">Pickup location: {displayPickupLocation}</div>
-            <div className="is-size-5 py-2">Pickup date/time: {pickupDateTime}</div>
-            <div className="is-size-5 py-2">Dropoff location: {displayDropoffLocation}</div>
-            <div className="is-size-5 py-2">Dropoff date/time: {dropoffDateTime}</div>
-            <div className="is-size-5 py-2">Distance (mi): {load.distance}</div>
-            <div className="is-size-5 py-2">Hazardous? {isHazardous ? "Yes" : "No"}</div>
-            <div className="py-4">
-                {
-                    load.load_status?.label !== "Delivered"
-                        ?
-                        <button onClick={drawRoute} className="button btn-large has-background-grey has-text-white">{load.is_booked ? 'Locate truck' : 'View route'}</button>
-                        : ""
-                }
-            </div>
-            {
-                load.is_owner
-                    ?
+            <div className="columns">
+                <div className="column">
+                    <div className="title">Load #{load.id} details</div>
+                    <div className="is-size-5 py-2">Distributor: <Link to={`/users/${load.distributor?.id}`}>{load.distributor?.company}</Link></div>
+                    <div className="is-size-5 py-2">Load status: {load.load_status === null ? "Not booked" : load.load_status?.label}</div>
+                    <div className="is-size-5 py-2">Freight Types: {displayFreightTypeList}</div>
+                    <div className="is-size-5 py-2">Pickup location: {displayPickupLocation}</div>
+                    <div className="is-size-5 py-2">Pickup date/time: {pickupDateTime}</div>
+                    <div className="is-size-5 py-2">Dropoff location: {displayDropoffLocation}</div>
+                    <div className="is-size-5 py-2">Dropoff date/time: {dropoffDateTime}</div>
+                    <div className="is-size-5 py-2">Distance (mi): {load.distance}</div>
+                    <div className="is-size-5 py-2">Hazardous? {isHazardous ? "Yes" : "No"}</div>
                     <div className="py-4">
-                        <button onClick={() => history.push(`/loads/${loadId}/edit`)} className="button mr-4 is-dark">Edit</button>
                         {
-                            !load.is_booked
+                            load.load_status?.label !== "Delivered"
                                 ?
-                                <button onClick={handleDelete} className="button is-danger">Delete</button>
+                                <button onClick={drawRoute} className="button btn-large has-background-grey has-text-white">{load.is_booked ? 'Locate truck' : 'View route'}</button>
                                 : ""
                         }
                     </div>
-                    : ""
-            }
+                    {
+                        load.is_owner
+                            ?
+                            <div className="py-4">
+                                <button onClick={() => history.push(`/loads/${loadId}/edit`)} className="button mr-4 is-dark">Edit</button>
+                                {
+                                    !load.is_booked
+                                        ?
+                                        <button onClick={handleDelete} className="button is-danger">Delete</button>
+                                        : ""
+                                }
+                            </div>
+                            : ""
+                    }
+                </div>
+                <div className="column">
+                    <div className="title">Load history</div>
+                    <table className={"table is-bordered"}>
+                        <thead>
+                            <tr>
+                                <th className="is-size-6">Status</th>
+                                <th className="is-size-6">Location</th>
+                                <th className="is-size-6">Timestamp</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {
+                                loadHistory.map(h => {
+                                    const historyStatus = () => {
+                                        if (!h.load_status) {
+                                            return "Load created"
+                                        }
+                                        else if (h.load_status?.id === 8) {
+                                            return "Load Edited"
+                                        }
+                                        else {
+                                            return h.load_status?.label
+                                        }
+                                    }
+                                    return (
+                                        <tr key={h.id}>
+                                            <td>{historyStatus()}</td>
+                                            <td>{h.city}, {h.state}</td>
+                                            <td>{moment(h.timestamp).format("llll")}</td>
+                                        </tr>
+                                    )
+                                })
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
             <div
                 className={isHovering ? "box bid-macros-hover is-flex is-flex-direction-row is-justify-content-space-around" : "box bid-macros is-flex is-flex-direction-row is-justify-content-space-around"}
                 style={{ width: "50%", margin: "2em 0" }}
@@ -161,7 +204,7 @@ export const LoadDetails = ({ syncLoads, userType, trucks }) => {
                 }
             </div>
 
-            {bidManager && <BidForm trucks={trucks} userType={userType} syncLoad={syncLoad} load={load} loadId={loadId} />}
+            {bidManager && <BidForm trucks={trucks} userType={userType} syncLoad={syncLoad} load={load} loadId={loadId} syncLoadHistory={syncLoadHistory} />}
 
         </div>
     )

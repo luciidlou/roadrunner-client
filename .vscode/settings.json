@@ -9,6 +9,8 @@
         "freighttypes",
         "loadbids",
         "loadboard",
+        "loadhistories",
+        "loadhistory",
         "loadmanager",
         "loadstatus",
         "loadstatuses",
