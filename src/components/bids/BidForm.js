@@ -44,6 +44,16 @@ export const BidForm = ({ trucks, userType, syncLoad, load, loadId }) => {
     }
 
 
+    const timerHasEnded = () => {
+        const currentDatetime = Date.now()
+        if (currentDatetime > moment(load.bid_ending).format('x')) {
+            return true
+        }
+        else {
+            return false
+        }
+    }
+
     return (
         <>
             <div className="columns" style={{ borderTop: "1px solid black", marginTop: "30px", paddingTop: "30px" }}>
@@ -51,67 +61,74 @@ export const BidForm = ({ trucks, userType, syncLoad, load, loadId }) => {
                     userType === "dispatcher"
                         ?
                         <div className="column is-3">
-                            <div className="title">{load.is_booked ? "Bidding is closed" : "Bidding is open!"}</div>
+                            <div className="title">{load.is_booked || timerHasEnded() ? "Bidding is closed" : "Bidding is open!"}</div>
+                            <div>Bidding {timerHasEnded() ? "closed" : "closes"} {moment.utc(load.bid_ending).endOf().fromNow()}</div>
                             {
-                                load.is_booked === true
+                                load.is_booked === true || timerHasEnded()
                                     ?
-                                    <progress class="progress is-danger" value="100" max="100">90%</progress>
+                                    <progress class="progress is-danger" value="100" max="100"></progress>
                                     :
-                                    <progress className="progress is-small is-primary" max="100">15%</progress>
+                                    <progress className="progress is-small is-primary" max="100"></progress>
                             }
-                            <form onSubmit={handleSubmitBid} className="form">
-                                <div className="is-size-3">Place bid</div>
-                                {/* dollar_amount */}
-                                <fieldset className="my-5 is-size-5">
-                                    <label htmlFor="dollar_amount">Dollar amount</label>
-                                    <input
-                                        value={bidBuilder.dollar_amount}
-                                        onChange={handleOnChange}
-                                        className="input name m-auto"
-                                        type="number"
-                                        step={.01}
-                                        inputMode='decimal'
-                                        min={0.00}
-                                        name="dollar_amount"
-                                        required
-                                    />
-                                </fieldset>
-                                {/* truck */}
-                                <fieldset className="my-5 is-size-5">
-                                    <label htmlFor="truck">Truck</label>
-                                    <div>
-                                        <select
-                                            value={bidBuilder.truck}
-                                            onChange={handleOnChange}
-                                            className="input name m-auto"
-                                            required
-                                            name="truck">
-                                            <option value={0} hidden>Select available truck</option>
-                                            {
-                                                trucks.map(t => {
-                                                    if (t.is_assigned) {
-                                                        return <option disabled key={t.id} value={t.id}>{t.alias} (Unavailable)</option>
+                            {
+                                load.is_booked || timerHasEnded()
+                                    ? ""
+                                    :
+                                    <form onSubmit={handleSubmitBid} className="form">
+                                        <div className="is-size-3">Place bid</div>
+                                        {/* dollar_amount */}
+                                        <fieldset className="my-5 is-size-5">
+                                            <label htmlFor="dollar_amount">Dollar amount</label>
+                                            <input
+                                                value={bidBuilder.dollar_amount}
+                                                onChange={handleOnChange}
+                                                className="input name m-auto"
+                                                type="number"
+                                                step={.01}
+                                                inputMode='decimal'
+                                                min={0.00}
+                                                name="dollar_amount"
+                                                required
+                                            />
+                                        </fieldset>
+                                        {/* truck */}
+                                        <fieldset className="my-5 is-size-5">
+                                            <label htmlFor="truck">Truck</label>
+                                            <div>
+                                                <select
+                                                    value={bidBuilder.truck}
+                                                    onChange={handleOnChange}
+                                                    className="input name m-auto"
+                                                    required
+                                                    name="truck">
+                                                    <option value={0} hidden>Select available truck</option>
+                                                    {
+                                                        trucks.map(t => {
+                                                            if (t.is_assigned) {
+                                                                return <option disabled key={t.id} value={t.id}>{t.alias} (Unavailable)</option>
+                                                            }
+                                                            return <option key={t.id} value={t.id}>{t.alias} - {t.trailer_type?.label} ({t.current_city}, {t.current_state})</option>
+                                                        })
                                                     }
-                                                    return <option key={t.id} value={t.id}>{t.alias} - {t.trailer_type?.label} ({t.current_city}, {t.current_state})</option>
-                                                })
-                                            }
-                                        </select>
-                                    </div>
-                                </fieldset>
-                                <div className="container">
-                                    <button type="submit" className="button is-success">Confirm bid</button>
-                                </div>
-                            </form>
+                                                </select>
+                                            </div>
+                                        </fieldset>
+                                        <div className="container">
+                                            <button type="submit" className="button is-success">Confirm bid</button>
+                                        </div>
+                                    </form>
+                            }
                         </div>
                         :
                         <div className="column is-3">
-                            <div className="title">{load.is_booked ? "Bidding is closed" : "Bidding is open!"}</div>
+                            <div className="title">{load.is_booked || timerHasEnded() ? "Bidding is closed" : "Bidding is open!"}</div>
+                            <div>Bidding {timerHasEnded() ? "closed" : "closes"} {moment.utc(load.bid_ending).endOf().fromNow()}</div>
                             {
-                                load.is_booked === true
+                                load.is_booked === true || timerHasEnded()
                                     ?
                                     <progress className="progress is-danger" value="100" max="100"></progress>
                                     :
-                                    <progress className="progress is-small is-primary" max="100">15%</progress>
+                                    <progress className="progress is-small is-primary" max="100"></progress>
                             }
                         </div>
                 }
@@ -149,7 +166,6 @@ export const BidForm = ({ trucks, userType, syncLoad, load, loadId }) => {
                                                     <td>{b.is_accepted ? "✅" : "❌"}</td>
                                                     :
                                                     <td>N/A</td>
-
                                             }
                                         </tr>
                                     )

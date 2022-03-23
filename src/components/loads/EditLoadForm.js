@@ -111,7 +111,7 @@ export const EditLoadForm = ({ freightTypes, syncFreightTypes, syncLoads }) => {
         }
         LoadRepository.update(loadId, loadBuilder)
             .then(syncLoads)
-            .then(() => history.push("/loadboard"))
+            .then(() => history.push(`/loads/${loadId}`))
     }
 
     return (
