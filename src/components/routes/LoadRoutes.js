@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import { Route } from "react-router-dom"
 import { FreightTypeRepository } from "../../repositories/FreightTypeRepository"
+import { LoadHistoryRepository } from "../../repositories/LoadHistoryRepository"
 import { LoadRepository } from "../../repositories/LoadRepository"
 import { BidDetails } from "../bids/BidDetails"
 import { EditLoadForm } from "../loads/EditLoadForm"
@@ -12,6 +13,7 @@ import { NewLoadForm } from "../loads/NewLoadForm"
 export const LoadRoutes = ({ userType, trucks }) => {
     const [loads, setLoads] = useState([])
     const [cityFilter, setCityFilter] = useState("")
+    const [loadHistory, setLoadHistory] = useState([])
     const [freightTypes, setFreightTypes] = useState([])
 
     const syncLoads = () => {
@@ -23,6 +25,11 @@ export const LoadRoutes = ({ userType, trucks }) => {
             LoadRepository.list()
                 .then(setLoads)
         }
+    }
+
+    const syncLoadHistory = (loadId) => {
+        LoadHistoryRepository.retrieve(loadId)
+            .then(setLoadHistory)
     }
 
     useEffect(() => {
@@ -45,19 +52,19 @@ export const LoadRoutes = ({ userType, trucks }) => {
             </Route>
 
             <Route exact path="/loads/create">
-                <NewLoadForm freightTypes={freightTypes} syncFreightTypes={syncFreightTypes} syncLoads={syncLoads} />
+                <NewLoadForm loadHistory={loadHistory} syncLoadHistory={syncLoadHistory} freightTypes={freightTypes} syncFreightTypes={syncFreightTypes} syncLoads={syncLoads} />
             </Route>
 
             <Route exact path="/loads/:loadId(\d+)/edit">
-                <EditLoadForm freightTypes={freightTypes} syncFreightTypes={syncFreightTypes} syncLoads={syncLoads} />
+                <EditLoadForm loadHistory={loadHistory} syncLoadHistory={syncLoadHistory} freightTypes={freightTypes} syncFreightTypes={syncFreightTypes} syncLoads={syncLoads} />
             </Route>
 
             <Route exact path="/loads/:loadId(\d+)/bids/:bidId(\d+)">
-                <BidDetails userType={userType} syncLoads={syncLoads} />
+                <BidDetails loadHistory={loadHistory} syncLoadHistory={syncLoadHistory} userType={userType} syncLoads={syncLoads} />
             </Route>
 
             <Route exact path="/loads/:loadId(\d+)">
-                <LoadDetails syncLoads={syncLoads} userType={userType} trucks={trucks} />
+                <LoadDetails loadHistory={loadHistory} syncLoadHistory={syncLoadHistory} syncLoads={syncLoads} userType={userType} trucks={trucks} />
             </Route>
 
             <Route exact path="/loadmanager">

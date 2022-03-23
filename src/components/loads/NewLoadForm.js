@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react"
 import { useHistory } from "react-router-dom"
+import { LoadHistoryRepository } from "../../repositories/LoadHistoryRepository"
 import { LoadRepository } from "../../repositories/LoadRepository"
 import { QueryMaps } from "../../utilities/QueryMaps"
 import { StatesArray } from "../../utilities/StatesArray"
 
-export const NewLoadForm = ({ freightTypes, syncFreightTypes, syncLoads }) => {
+export const NewLoadForm = ({ freightTypes, syncFreightTypes, syncLoads, syncLoadHistory }) => {
     const history = useHistory()
 
     const [loadBuilder, setLoadBuilder] = useState({
@@ -89,6 +90,15 @@ export const NewLoadForm = ({ freightTypes, syncFreightTypes, syncLoads }) => {
                 loadBuilder.is_hazardous = false
             }
             LoadRepository.create(loadBuilder)
+                .then(newLoad => {
+                    LoadHistoryRepository.create({
+                        load: newLoad.id,
+                        load_status: null,
+                        city: newLoad.pickup_city,
+                        state: newLoad.pickup_state
+                    })
+                    syncLoadHistory(newLoad.id)
+                })
                 .then(syncLoads)
                 .then(() => history.push("/loadboard"))
         }

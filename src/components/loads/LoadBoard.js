@@ -15,6 +15,9 @@ export const LoadBoard = ({ loads, userType, setCityFilter, syncLoads }) => {
     return (
         <>
             <div className="is-size-3 mb-1">Load Board</div>
+            {
+                loads.length
+                ?
             <div className="box" style={{ width: "fit-content" }}>
 
                 <div className="mb-5 is-size-4 is-flex-direction-row">
@@ -128,6 +131,9 @@ export const LoadBoard = ({ loads, userType, setCityFilter, syncLoads }) => {
                     </tbody>
                 </table>
             </div>
+            :
+            <div className="is-size-5">Could not find any available loads!</div>
+            }
         </>
     )
 }

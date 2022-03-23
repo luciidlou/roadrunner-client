@@ -4,7 +4,7 @@ import { LoadRepository } from "../../repositories/LoadRepository"
 import moment from "moment"
 import { useHistory } from "react-router-dom"
 
-export const BidForm = ({ trucks, userType, syncLoad, load, loadId }) => {
+export const BidForm = ({ trucks, userType, syncLoad, load, loadId, syncLoadHistory }) => {
     const history = useHistory()
     const [loadBids, setLoadBids] = useState([])
     const [bidBuilder, setBidBuilder] = useState({
@@ -66,7 +66,7 @@ export const BidForm = ({ trucks, userType, syncLoad, load, loadId }) => {
                             {
                                 load.is_booked === true || timerHasEnded()
                                     ?
-                                    <progress class="progress is-danger" value="100" max="100"></progress>
+                                    <progress className="progress is-danger" value="100" max="100"></progress>
                                     :
                                     <progress className="progress is-small is-primary" max="100"></progress>
                             }
@@ -122,7 +122,12 @@ export const BidForm = ({ trucks, userType, syncLoad, load, loadId }) => {
                         :
                         <div className="column is-3">
                             <div className="title">{load.is_booked || timerHasEnded() ? "Bidding is closed" : "Bidding is open!"}</div>
-                            <div>Bidding {timerHasEnded() ? "closed" : "closes"} {moment.utc(load.bid_ending).endOf().fromNow()}</div>
+                            {
+                                !load.is_booked
+                                    ?
+                                    <div>Bidding {timerHasEnded() ? "closed" : "closes"} {moment.utc(load.bid_ending).endOf().fromNow()}</div>
+                                    : ""
+                            }
                             {
                                 load.is_booked === true || timerHasEnded()
                                     ?
@@ -161,7 +166,7 @@ export const BidForm = ({ trucks, userType, syncLoad, load, loadId }) => {
                                             <td>{b.truck?.current_city}, {b.truck?.current_state}</td>
                                             <td >{moment(b.timestamp).format('llll')}</td>
                                             {
-                                                load.is_booked
+                                                load.is_booked || timerHasEnded()
                                                     ?
                                                     <td>{b.is_accepted ? "✅" : "❌"}</td>
                                                     :

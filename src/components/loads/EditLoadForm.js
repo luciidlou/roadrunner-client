@@ -2,11 +2,12 @@ import moment from "moment"
 import { useEffect, useState } from "react"
 import { useHistory } from "react-router-dom"
 import { useParams } from "react-router-dom"
+import { LoadHistoryRepository } from "../../repositories/LoadHistoryRepository"
 import { LoadRepository } from "../../repositories/LoadRepository"
 import { QueryMaps } from "../../utilities/QueryMaps"
 import { StatesArray } from "../../utilities/StatesArray"
 
-export const EditLoadForm = ({ freightTypes, syncFreightTypes, syncLoads }) => {
+export const EditLoadForm = ({ freightTypes, syncFreightTypes, syncLoads, syncLoadHistory }) => {
     const { loadId } = useParams()
     const history = useHistory()
     const [loadBuilder, setLoadBuilder] = useState({
@@ -110,7 +111,17 @@ export const EditLoadForm = ({ freightTypes, syncFreightTypes, syncLoads }) => {
             loadBuilder.is_hazardous = false
         }
         LoadRepository.update(loadId, loadBuilder)
+        LoadRepository.retrieve(loadId)
+            .then(load => {
+                LoadHistoryRepository.create({
+                    load: load.id,
+                    load_status: 8,
+                    city: load.pickup_city,
+                    state: load.pickup_state
+                })
+            })
             .then(syncLoads)
+            .then(() => syncLoadHistory(loadId))
             .then(() => history.push(`/loads/${loadId}`))
     }
 
