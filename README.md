@@ -4,6 +4,9 @@
 
 ---
 
+<a href="https://github.com/luciidlou/roadrunner-api" target="_blank" rel="noreferrer">Visit API Repository</a>
+
+
 ### Table of Contents
 
 - [Description](#description)
@@ -69,11 +72,12 @@ npm start
 
 ---
 ### Demo
-<img src=# alt="">
+Coming soon
+<img src="" alt="">
 
 
 #### ERD
-<img src=# alt="">
+<img src="./src/images/roadrunner-ERD.png" alt="">
 ---
 
 ## License
