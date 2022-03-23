@@ -3,7 +3,7 @@ import { Link } from "react-router-dom"
 import { registerUser } from "./AuthManager"
 import "./Register.css"
 import logo1 from "../../images/roadrunner-logo1.png"
-import logo2 from "../../images/roadrunner-logo2.png"
+// import logo2 from "../../images/roadrunner-logo2.png"
 import { useHistory } from "react-router-dom"
 
 export const Register = ({ setToken }) => {
