@@ -117,8 +117,8 @@ export const Dashboard = ({ userType }) => {
                                                     <div className="is-size-5 my-3">Distance (miles): {l.distance}</div>
                                                     <div className="is-size-5 my-3">Pickup on: {pickupDatetime}</div>
                                                     <div className="is-size-5 my-3">Dropoff on: {dropoffDatetime}</div>
-                                                    <div className="is-size-5 my-3">Distributor: {l.distributor?.company}</div>
-                                                    <div className="is-size-5 my-3">Dispatcher: {l.assigned_truck?.dispatcher?.company}</div>
+                                                    <div className="is-size-5 my-3">Distributor: <Link to={`/users/${l.distributor?.id}`}>{l.distributor?.company}</Link></div>
+                                                    <div className="is-size-5 my-3">Dispatcher: <Link to={`/users/${l.assigned_truck?.dispatcher?.id}`}>{l.assigned_truck?.dispatcher?.company}</Link></div>
                                                     <div className="is-size-5 my-3">Truck: <Link to={`/trucks/${l.assigned_truck?.id}`}>{l.assigned_truck?.alias}</Link> ({l.assigned_truck?.current_city}, {l.assigned_truck?.current_state})</div>
                                                     <div className="is-size-5 my-3">Status: {l.load_status?.label}</div>
                                                 </div>

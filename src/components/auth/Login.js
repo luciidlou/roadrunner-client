@@ -40,7 +40,7 @@ export const Login = ({ setToken, setUserType }) => {
                 <img src={logo1} alt="Bookkeeper logo" />
             </figure>
             <div className="title has-text-centered">Roadrunner</div>
-            <div className="subtitle has-text-centered is-italic mb-4">Taking things one mile at a time</div>
+            <div className="subtitle has-text-centered is-italic mb-4">Moving freight one mile at a time</div>
             <h4 className="h4 is-size-5 has-text-centered">Login</h4>
             <div className="columns">
                 <div className="column is-3"></div>

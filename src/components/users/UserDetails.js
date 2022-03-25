@@ -63,6 +63,7 @@ export const UserDetails = ({ userType }) => {
             <div className="is-size-5 py-2">Established in: {moment(user.established).format('YYYY')}</div>
             <div className="is-size-5 py-2">Joined on: {moment(user.user?.date_joined).format('LL')}</div>
             <div className="is-size-5 py-2">Representative: {user.user?.first_name} {user.user?.last_name}</div>
+            <div className="is-size-5 py-2">Contact: {user.user?.email}</div>
             <div className="is-size-5 py-2">About: {user.about}</div>
             {
                 userType === "distributor" && user.user_type === "dispatcher"
