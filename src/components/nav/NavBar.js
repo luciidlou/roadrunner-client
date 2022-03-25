@@ -17,10 +17,10 @@ export const NavBar = ({ token, setToken, userType, setUserType }) => {
     }
 
     return (
-        <nav className="navbar has-background-grey-lighter mb-3" role="navigation" aria-label="main navigation">
+        <nav className="navbar is-fixed-top has-background-grey-lighter mb-3" role="navigation" aria-label="main navigation">
             <div className="navbar-brand">
                 <a className="navbar-item" href="/">
-                    <img src={logo2} height="3rem" />
+                    <img src={logo1} height="3rem" />
                     <h1 className="title is-3 pl-3">Roadrunner
                         <br></br>
                         <p className='is-italic is-size-6 subtitle'>{userType === "distributor" ? "Distributor portal" : "Dispatcher portal"}</p>

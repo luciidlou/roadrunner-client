@@ -112,12 +112,10 @@ export const BidDetails = ({ userType, syncLoads, syncLoadHistory }) => {
                     bid.is_accepted
                         ?
                         <div className="py-4">
-                            <button disabled className="button mr-4 is-dark">Edit</button>
                             <button disabled onClick={() => handleDeleteBid(bidId, bid.load?.id)} className="button is-danger">Delete</button>
                         </div>
                         :
                         <div className="py-4">
-                            <button className="button mr-4 is-dark">Edit</button>
                             <button onClick={() => handleDeleteBid(bidId, bid.load?.id)} className="button is-danger">Delete</button>
                         </div>
                     : ""

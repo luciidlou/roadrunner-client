@@ -6,7 +6,7 @@ import logo1 from "../../images/roadrunner-logo1.png"
 // import logo2 from "../../images/roadrunner-logo2.png"
 import { useHistory } from "react-router-dom"
 
-export const Register = ({ setToken }) => {
+export const Register = ({ setToken, setUserType }) => {
     const history = useHistory()
     const firstName = useRef()
     const lastName = useRef()
@@ -18,7 +18,7 @@ export const Register = ({ setToken }) => {
     const company = useRef()
     const established = useRef()
     const about = useRef()
-    const [userType, setUserType] = useState("")
+    const [registerUserType, setRegisterUserType] = useState("")
 
     const handleRegister = (e) => {
         e.preventDefault()
@@ -33,7 +33,7 @@ export const Register = ({ setToken }) => {
                 "company": company.current.value,
                 "about": about.current.value,
                 "established": established.current.value,
-                "user_type": userType
+                "user_type": registerUserType
             }
 
             registerUser(newUser)
@@ -54,7 +54,7 @@ export const Register = ({ setToken }) => {
         const checkboxes = document.querySelectorAll('.user-type')
         for (const box of checkboxes) {
             if (box.checked) {
-                setUserType(event.target.value)
+                setRegisterUserType(event.target.value)
             }
         }
     }

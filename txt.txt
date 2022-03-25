@@ -1,51 +1,37 @@
-// State	Abbreviation
-// ALABAMA	AL
-// ALASKA	AK
-// ARIZONA	AZ
-// ARKANSAS	AR
-// CALIFORNIA	CA
-// COLORADO	CO
-// CONNECTICUT	CT
-// DELAWARE	DE
-// FLORIDA	FL
-// GEORGIA	GA
-// HAWAII	HI
-// IDAHO	ID
-// ILLINOIS	IL
-// INDIANA	IN
-// IOWA	IA
-// KANSAS	KS
-// KENTUCKY	KY
-// LOUISIANA	LA
-// MAINE	ME
-// MARYLAND	MD
-// MASSACHUSETTS	MA
-// MICHIGAN	MI
-// MINNESOTA	MN
-// MISSISSIPPI	MS
-// MISSOURI	MO
-// MONTANA	MT
-// NEBRASKA	NE
-// NEVADA	NV
-// NEW HAMPSHIRE	NH
-// NEW JERSEY	NJ
-// NEW MEXICO	NM
-// NEW YORK	NY
-// NORTH CAROLINA	NC
-// NORTH DAKOTA	ND
-// OHIO	OH
-// OKLAHOMA	OK
-// OREGON	OR
-// PENNSYLVANIA	PA
-// RHODE ISLAND	RI
-// SOUTH CAROLINA	SC
-// SOUTH DAKOTA	SD
-// TENNESSEE	TN
-// TEXAS	TX
-// UTAH	UT
-// VERMONT	VT
-// VIRGINIA	VA
-// WASHINGTON	WA
-// WEST VIRGINIA	WV
-// WISCONSIN	WI
-// WYOMING	WY
+7 7th Hill
+843 David Plaza
+13996 Nevada Road
+4032 Service Avenue
+7953 Daystar Parkway
+4590 Meadow Ridge Street
+045 Cody Trail
+1 Drewry Lane
+9 Dapin Park
+34448 Clyde Gallagher Way
+80021 North Plaza
+1 Meadow Vale Terrace
+005 Sutherland Center
+09 Crest Line Trail
+8145 Huxley Drive
+300 Union Way
+50838 Lyons Park
+67476 Crownhardt Crossing
+53523 Mandrake Circle
+50 Vidon Circle
+188 Loomis Drive
+39 Buhler Way
+6401 Armistice Drive
+300 Union Way
+782 Ludington Trail
+57542 Birchwood Alley
+23029 4th Alley
+140 8th Drive
+91 Carpenter Point
+2 Fairview Lane
+826 Gina Drive
+34 Loomis Avenue
+9023 Warner Plaza
+36 Loomis Place
+605 Farwell Court
+404 Laurel Lane
+27 Crowley Park
